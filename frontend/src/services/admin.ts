@@ -16,6 +16,7 @@ import type {
   ResponseDto,
   ResponseDtoListVendorModelResp,
   ResponseDtoListModelResp,
+  ResponseDtoString,
   ModelCreateReq,
   ModelUpdateReq,
   ModelStatusUpdateReq,

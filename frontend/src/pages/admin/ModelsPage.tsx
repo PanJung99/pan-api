@@ -49,14 +49,6 @@ export function AdminModelsPage() {
     return vendorModel?.name || `模型 #${venModelId}`
   }
 
-  // 获取服务商名称
-  const getVendorName = (venModelId: number) => {
-    const vendorModel = vendorModels.find((vm) => vm.id === venModelId)
-    if (!vendorModel) return ""
-    // 这里需要从服务商列表获取名称，暂时返回 ID
-    return `服务商 #${vendorModel.vendorId}`
-  }
-
   const getCategoryLabel = (category: string) => {
     const map: Record<string, string> = {
       chat: "对话",

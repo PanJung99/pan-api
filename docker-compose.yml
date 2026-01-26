@@ -53,6 +53,7 @@ services:
       JAVA_OPTS: ${JAVA_OPTS:--Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0}
       # 时区
       TZ: Asia/Shanghai
+      LOG_PATH: /data/logs
     ports:
       - "${BACKEND_PORT:-8546}:8546"
     volumes:
