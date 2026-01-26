@@ -272,3 +272,20 @@ export interface ModelCreateReq {
   vendorModelIds: number[];
   pricingItems: PricingItemCreateReq[];
 }
+
+// 更新模型请求
+export interface ModelUpdateReq {
+  name: string;
+  displayName: string;
+  isFree: boolean;
+  category: string;
+  platformType: string;
+  description?: string;
+  vendorModelIds: number[];
+  pricingItems: PricingItemCreateReq[];
+}
+
+// 更新模型状态请求
+export interface ModelStatusUpdateReq {
+  enabled: boolean;
+}

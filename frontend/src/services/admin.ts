@@ -17,6 +17,8 @@ import type {
   ResponseDtoListVendorModelResp,
   ResponseDtoListModelResp,
   ModelCreateReq,
+  ModelUpdateReq,
+  ModelStatusUpdateReq,
 } from "@/types/api"
 
 export const adminService = {
@@ -117,6 +119,18 @@ export const adminService = {
   // 创建模型
   createModel: async (data: ModelCreateReq): Promise<ResponseDtoString> => {
     const response = await apiClient.post<ResponseDtoString>("/be-admin/models", data)
+    return response.data
+  },
+
+  // 更新模型
+  updateModel: async (id: number, data: ModelUpdateReq): Promise<ResponseDtoString> => {
+    const response = await apiClient.put<ResponseDtoString>(`/be-admin/models/${id}`, data)
+    return response.data
+  },
+
+  // 切换模型状态
+  toggleModelStatus: async (id: number, data: ModelStatusUpdateReq): Promise<ResponseDtoBoolean> => {
+    const response = await apiClient.patch<ResponseDtoBoolean>(`/be-admin/models/${id}/status`, data)
     return response.data
   },
 }

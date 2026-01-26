@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom"
-import { useAuthCheck } from "@/hooks/useAuthCheck"
+import { useEffect } from "react"
+import { useAuthStore } from "@/store/auth"
 import { HomePage } from "@/pages/landing/HomePage"
 import { LoginPage } from "@/pages/landing/LoginPage"
 import { RegisterPage } from "@/pages/landing/RegisterPage"
@@ -17,7 +18,16 @@ import { VendorModelsPage } from "@/pages/admin/VendorModelsPage"
 
 // 路由守卫组件
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuthCheck()
+  const { isAuthenticated, isChecked, checkAuth } = useAuthStore()
+  
+  useEffect(() => {
+    checkAuth()
+  }, [])
+  
+  if (!isChecked) {
+    return null // 等待认证检查完成
+  }
+  
   return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />
 }
 

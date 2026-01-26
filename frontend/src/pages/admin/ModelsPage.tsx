@@ -13,12 +13,16 @@ import { Button } from "@/components/ui/button"
 import { adminService } from "@/services/admin"
 import type { ModelResp, VendorModelResp } from "@/types/api"
 import { ModelCreateDialog } from "@/components/common/model/ModelCreateDialog"
+import { ModelUpdateDialog } from "@/components/common/model/ModelUpdateDialog"
+import { toast } from "sonner"
 
 export function AdminModelsPage() {
   const [models, setModels] = useState<ModelResp[]>([])
   const [vendorModels, setVendorModels] = useState<VendorModelResp[]>([])
   const [loading, setLoading] = useState(true)
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false)
+  const [selectedModel, setSelectedModel] = useState<ModelResp | null>(null)
 
   const fetchData = async () => {
     try {
@@ -77,6 +81,43 @@ export function AdminModelsPage() {
     return map[unit] || unit
   }
 
+  const coerceModelId = (value: unknown): number | null => {
+    if (value === null || value === undefined) return null
+    if (typeof value === "number" && Number.isFinite(value)) return value
+    if (typeof value === "string" && value.trim() !== "") {
+      const n = Number(value)
+      return Number.isFinite(n) ? n : null
+    }
+    return null
+  }
+
+  const handleEdit = (model: ModelResp) => {
+    const modelId = coerceModelId((model as any).id)
+    if (modelId === null) {
+      toast.error("模型ID无效，无法编辑")
+      return
+    }
+    setSelectedModel(model)
+    setUpdateDialogOpen(true)
+  }
+
+  const handleToggleStatus = async (model: ModelResp) => {
+    const newStatus = model.isActive === 1 ? false : true
+    try {
+      const modelId = coerceModelId((model as any).id)
+      if (modelId === null) {
+        toast.error("模型ID无效，无法切换状态")
+        return
+      }
+      await adminService.toggleModelStatus(modelId, { enabled: newStatus })
+      toast.success(newStatus ? "模型已启用" : "模型已禁用")
+      fetchData()
+    } catch (error) {
+      console.error("切换模型状态失败:", error)
+      toast.error("切换模型状态失败，请稍后重试")
+    }
+  }
+
   if (loading) {
     return (
       <AdminLayout>
@@ -101,28 +142,42 @@ export function AdminModelsPage() {
         ) : (
           <div className="space-y-6">
             {models.map((model) => (
-              <Card key={model.id}>
+              <Card key={String((model as any).id ?? model.name)}>
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <div>
-                      <CardTitle>{model.displayName || model.name}</CardTitle>
-                      <CardDescription>{model.description || "无描述"}</CardDescription>
+                      <div className="flex items-center gap-2 mb-1">
+                        {model.isFree && (
+                          <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">
+                            免费
+                          </span>
+                        )}
+                        <span
+                          className={`px-2 py-1 text-xs rounded ${
+                            model.isActive === 1
+                              ? "bg-green-100 text-green-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {model.isActive === 1 ? "启用" : "禁用"}
+                        </span>
+                      </div>
+                      <div>
+                        <CardTitle>{model.displayName || model.name}</CardTitle>
+                        <CardDescription>{model.description || "无描述"}</CardDescription>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      {model.isFree && (
-                        <span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">
-                          免费
-                        </span>
-                      )}
-                      <span
-                        className={`px-2 py-1 text-xs rounded ${
-                          model.isActive === 1
-                            ? "bg-green-100 text-green-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleToggleStatus(model)}
                       >
-                        {model.isActive === 1 ? "启用" : "禁用"}
-                      </span>
+                        {model.isActive === 1 ? "禁用" : "启用"}
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleEdit(model)}>
+                        编辑
+                      </Button>
                     </div>
                   </div>
                 </CardHeader>
@@ -214,6 +269,13 @@ export function AdminModelsPage() {
           open={createDialogOpen}
           onOpenChange={setCreateDialogOpen}
           onCreated={fetchData}
+        />
+
+        <ModelUpdateDialog
+          open={updateDialogOpen}
+          onOpenChange={setUpdateDialogOpen}
+          model={selectedModel}
+          onUpdated={fetchData}
         />
       </div>
     </AdminLayout>

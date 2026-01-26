@@ -2,6 +2,7 @@ import { create } from "zustand"
 
 interface AuthState {
   isAuthenticated: boolean
+  isChecked: boolean
   setToken: (token: string | null) => void
   checkAuth: () => void
   logout: () => Promise<void>
@@ -13,6 +14,7 @@ interface AuthState {
  */
 export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
+  isChecked: false,
 
   // 设置token到cookie
   setToken: (token: string | null) => {
@@ -32,7 +34,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   // 检查认证状态（检查usif cookie是否存在）
   checkAuth: () => {
     const hasCookie = document.cookie.includes("usif=")
-    set({ isAuthenticated: hasCookie })
+    set({ isAuthenticated: hasCookie, isChecked: true })
   },
 
   // 登出
