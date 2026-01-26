@@ -99,10 +99,5 @@
         WHERE id = #{id}
     </update>
 
-    <update id="updateIsActiveByName">
-        UPDATE md_model
-        SET is_active = #{isActive}, updated_at = NOW()
-        WHERE name = #{name} AND is_deleted = 0
-    </update>
 
 </mapper>

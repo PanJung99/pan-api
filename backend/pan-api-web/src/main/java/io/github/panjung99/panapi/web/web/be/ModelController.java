@@ -31,16 +31,6 @@ public class ModelController {
 
     @GetMapping("/types")
     public ResponseDto<List<Map<String, String>>> modelTypes() {
-        List<Map<String, String>> types = Arrays.stream(PlatformEnum.values())
-                .map(en -> {
-                    Map<String, String> map = new HashMap<>();
-                    map.put("code", en.name());
-                    map.put("name", en.getName());
-                    map.put("description", en.getDescription());
-                    map.put("iconUrl", en.getIconUrl());
-                    return map;
-                }).toList();
-
-        return ResponseDto.getSuccessResponse(types);
+        return ResponseDto.getSuccessResponse(backendService.modelTypeList());
     }
 }

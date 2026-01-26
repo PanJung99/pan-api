@@ -42,28 +42,31 @@ public class BillingService {
         if (model.getIsFree()) {
             orderService.createOrder(reqId, request, stream, usage,
                     userId, apiKeyId, model, vendorModel, BigDecimal.ZERO, vendorOrderNo);
+            return;
         }
 
         if (usage == null) {
-            //TODO
+            log.error("Settle fail, usage is null. reqId:{} vendorOrderNo:{}", reqId, vendorOrderNo);
+            throw new AppException(ErrorEnum.INTERNAL_ERROR);
         }
 
         List<PricingItem> pricingItems = pricingItemService.getByModelId(model.getId());
         if (pricingItems == null || pricingItems.isEmpty()) {
+            log.error("Model configuration wrong, pricing item not exist. modelId:{}", model.getId());
             throw new AppException(ErrorEnum.MODEL_PRICING_ITEM_NOT_FOUND);//TODO 要不要打日志 把modelId打出来  问问ai？
         }
 
         BigDecimal totalAmount = BigDecimal.ZERO;
         for (PricingItem pricingItem : pricingItems) {
-            // 扣费
+            // deduct
             BigDecimal amount = balanceCalculateService.calculate(usage, model, pricingItem);
             userBalanceService.deductBalance(userId, amount);
             billService.createBill(Bill.BillType.API_DEDUCTION, amount.negate(), apiKeyId, userId, reqId, desc, model.getId(), model.getName());
-            log.info("订单 {} 部分扣费完成, reqId: {}, 金额: {}", pricingItem.getUnit(), reqId, amount);
+            log.info("Partial deduction completed for pricingItem:{}, reqId:{}, amount:{}", pricingItem.getUnit(), reqId, amount);
             totalAmount = totalAmount.add(amount);
         }
 
-        // 创建订单
+        // create order
         orderService.createOrder(reqId, request, stream, usage,
                 userId, apiKeyId, model, vendorModel, totalAmount, vendorOrderNo);
     }

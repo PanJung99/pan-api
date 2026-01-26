@@ -3,7 +3,6 @@
 TODO
 - api_order mapper 字段核对 清除无用字段
 - ModelType改为枚举
-- 尝试接入一家服务商
 - 完善datetime格式以及解析逻辑
 - api限额、日期
 - 雪花算法重新设计

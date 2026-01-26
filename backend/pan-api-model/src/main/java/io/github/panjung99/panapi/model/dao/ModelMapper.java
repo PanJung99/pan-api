@@ -64,12 +64,4 @@ public interface ModelMapper {
      */
     int logicalDelete(@Param("id") Long id);
 
-    /**
-     * 按名称更新激活状态
-     * @param name 名称(对应 geek_model.model_id)
-     * @param isActive 激活标记 0/1
-     * @return 影响行数
-     */
-    int updateIsActiveByName(@Param("name") String name, @Param("isActive") Integer isActive);
-
 }

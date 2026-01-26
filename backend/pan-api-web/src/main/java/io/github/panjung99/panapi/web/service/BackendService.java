@@ -3,6 +3,7 @@ package io.github.panjung99.panapi.web.service;
 import io.github.panjung99.panapi.common.dto.be.RechargePlanResp;
 import io.github.panjung99.panapi.common.dto.be.UserProfileResp;
 import io.github.panjung99.panapi.common.dto.be.UserResp;
+import io.github.panjung99.panapi.common.enums.PlatformEnum;
 import io.github.panjung99.panapi.order.service.ApiRequestOrderService;
 import io.github.panjung99.panapi.user.entity.RechargePlan;
 import io.github.panjung99.panapi.user.entity.User;
@@ -10,15 +11,16 @@ import io.github.panjung99.panapi.user.service.ApiKeyService;
 import io.github.panjung99.panapi.user.service.RechargePlanService;
 import io.github.panjung99.panapi.user.service.UserBalanceService;
 import io.github.panjung99.panapi.user.service.UserService;
-import io.github.panjung99.panapi.model.entity.ModelType;
 
-import io.github.panjung99.panapi.model.service.ModelTypeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A service for frontend queries, all methods intended to frontend use should be placed here.
@@ -36,16 +38,22 @@ public class BackendService {
 
     private final ApiKeyService apiKeyService;
 
-    private final ModelTypeService modelTypeService;
-
     private final RechargePlanService rechargePlanService;
 
     /**
      * Retrieves all available model type. (e.g.,chatgpt, glm, gemini)
      * @return list of model type with their names, descriptions, icon URLs
      */
-    public List<ModelType> modelTypeList() {
-        return modelTypeService.listAll();//TODO 删掉或把modelTypes逻辑迁到这
+    public List<Map<String, String>> modelTypeList() {
+        return Arrays.stream(PlatformEnum.values())
+                .map(en -> {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("code", en.name());
+                    map.put("name", en.getName());
+                    map.put("description", en.getDescription());
+                    map.put("iconUrl", en.getIconUrl());
+                    return map;
+                }).toList();
     }
 
     /**

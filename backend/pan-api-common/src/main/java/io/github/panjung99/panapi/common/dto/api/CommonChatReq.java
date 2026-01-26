@@ -236,18 +236,6 @@ public class CommonChatReq {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String verbosity;
 
-//    /**TODO search 先注释掉
-//     * Geek独有字段 开启搜索
-//     */
-//    @JsonProperty("enable_search")
-//    private Boolean enableSearch;
-//
-//    /**
-//     * Geek独有字段 搜索配置
-//     */
-//    @JsonProperty("search_config")
-//    private SearchConfig searchConfig;
-
 
     // ========== 嵌套类定义 ==========
 
