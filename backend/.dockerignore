@@ -1,0 +1,46 @@
+# Maven
+target/
+.mvn/
+mvnw
+mvnw.cmd
+*.iml
+.idea/
+.vscode/
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+*.tmp
+*.bak
+*.swp
+*~
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 测试相关
+*.test
+test/
+
+# 文档
+*.md
+README*
+LICENSE
+docs/
+
+# Docker 相关
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# 环境配置文件（如果需要，可以在运行时挂载）
+*.local
+.env

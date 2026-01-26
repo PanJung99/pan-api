@@ -1,13 +1,31 @@
 spring:
   datasource:
-    url:
-    username:
-    password:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/pan-api?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    min-poolsize: 1
-    max-poolsize: 3
-    connect-timeout-ms: 3000
-    validate-timeout-ms: 3000
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 10
+      connection-timeout: 3000
+      validation-timeout: 3000
+      max-lifetime: 600000       # 连接最大存活时间 10 分钟
+      idle-timeout: 300000        # 空闲连接的最大存活时间 5 分钟
+      keepalive-time: 60000      # 1 分钟发心跳包，避免被踢
 
+# JWT 配置
 jwt:
-  secret: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDEiLCJpYXQiOjE3NjgzNjg0MzMsImV4cCI6MTc2OTY2NDQzM30.aVOQi2_Ea8IuBpKvYzIyxxnMq5KeemZ6bpMRIkm_v0k
+  secret: ${JWT_SECRET:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDEiLCJpYXQiOjE3NjgzNjg0MzMsImV4cCI6MTc2OTY2NDQzM30.aVOQi2_Ea8IuBpKvYzIyxxnMq5KeemZ6bpMRIkm_v0k}
+
+# Actuator 配置（生产环境）
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+  health:
+    db:
+      enabled: true
