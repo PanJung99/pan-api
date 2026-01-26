@@ -44,11 +44,18 @@ public interface ModelMapper {
 
 
     /**
-     * 插入标签信息
+     * 插入模型信息
      * @param model 模型实体
      * @return 影响行数
      */
     int insert(Model model);
+
+    /**
+     * 更新模型信息
+     * @param model 模型实体
+     * @return 影响行数
+     */
+    int update(Model model);
 
     /**
      * 逻辑删除

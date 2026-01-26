@@ -50,7 +50,6 @@ public class AdminVendorController {
         return ResponseDto.getSuccessResponse("ok");
     }
 
-
     @GetMapping(value = "/types")
     public ResponseDto<List<Map<String, String>>> vendorTypes() {
         List<Map<String, String>> types = Arrays.stream(VenTypeEnum.values())
@@ -62,7 +61,6 @@ public class AdminVendorController {
                 }).toList();
         return ResponseDto.getSuccessResponse(types);
     }
-
 
     /**
      * token创建接口
@@ -76,7 +74,6 @@ public class AdminVendorController {
         vendorTokenService.createToken(vendorId, request);
         return ResponseDto.getSuccessResponse(true);
     }
-
 
     /**
      * token更新接口

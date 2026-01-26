@@ -75,6 +75,22 @@
         </trim>
     </insert>
 
+    <update id="update">
+        UPDATE md_model
+        <set>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="displayName != null and displayName != ''">display_name = #{displayName},</if>
+            <if test="isFree != null">is_free = #{isFree},</if>
+            <if test="category != null">category = #{category},</if>
+            <if test="platformType != null">platform_type = #{platformType},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="isActive != null">is_active = #{isActive},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            updated_at = NOW()
+        </set>
+        WHERE id = #{id} AND is_deleted = 0
+    </update>
+
     <update id="logicalDelete">
         UPDATE md_model
         SET

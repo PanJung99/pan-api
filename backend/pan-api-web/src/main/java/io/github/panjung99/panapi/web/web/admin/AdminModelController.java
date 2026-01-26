@@ -2,6 +2,8 @@ package io.github.panjung99.panapi.web.web.admin;
 
 import io.github.panjung99.panapi.common.dto.ResponseDto;
 import io.github.panjung99.panapi.common.dto.admin.ModelCreateReq;
+import io.github.panjung99.panapi.common.dto.admin.ModelStatusUpdateReq;
+import io.github.panjung99.panapi.common.dto.admin.ModelUpdateReq;
 import io.github.panjung99.panapi.common.dto.admin.VendorCreateReq;
 import io.github.panjung99.panapi.common.dto.be.ModelResp;
 import io.github.panjung99.panapi.model.service.ModelService;
@@ -40,6 +42,26 @@ public class AdminModelController {
     @PostMapping
     public ResponseDto<String> create(@Valid @RequestBody ModelCreateReq req) {
         return ResponseDto.getSuccessResponse(modelService.createModel(req));
+    }
+
+    @Operation(
+            summary = "Update Model",
+            description = "更新模型信息")
+    @PutMapping("/{id}")
+    public ResponseDto<String> update(
+            @PathVariable Long id,
+            @Valid @RequestBody ModelUpdateReq req) {
+        return ResponseDto.getSuccessResponse(modelService.updateModel(id, req));
+    }
+
+    @Operation(
+            summary = "Toggle Model Status",
+            description = "启用或禁用模型。禁用后，用户将无法调用该模型。")
+    @PatchMapping("/{id}/status")
+    public ResponseDto<Boolean> changeStatus(
+            @PathVariable Long id,
+            @RequestBody ModelStatusUpdateReq req) {
+        return ResponseDto.getSuccessResponse(modelService.changeModelStatus(id, req.getEnabled()));
     }
 
 }

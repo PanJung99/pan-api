@@ -25,6 +25,10 @@ public class ModelBindingService {
         return mapper.deleteById(id);
     }
 
+    public int deleteBindingByModelId(Long modelId) {
+        return mapper.deleteByModelId(modelId);
+    }
+
     public ModelBinding getById(Long id) {
         return mapper.selectById(id);
     }

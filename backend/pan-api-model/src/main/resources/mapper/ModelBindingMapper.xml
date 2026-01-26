@@ -43,6 +43,11 @@
         DELETE FROM md_model_binding WHERE id = #{id}
     </delete>
 
+    <!-- 删除模型下全部绑定 -->
+    <delete id="deleteByModelId" parameterType="long">
+        DELETE FROM md_model_binding WHERE model_id = #{modelId}
+    </delete>
+
     <!-- 根据ID查询 -->
     <select id="selectById" parameterType="long" resultType="io.github.panjung99.panapi.model.entity.ModelBinding">
         SELECT <include refid="Base_Column_List" />

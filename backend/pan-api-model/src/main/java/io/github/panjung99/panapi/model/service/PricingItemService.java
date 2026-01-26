@@ -25,6 +25,11 @@ public class PricingItemService {
         return count > 0;
     }
 
+    public boolean deleteByModelId(Long modelId) {
+        int count = pricingItemMapper.deleteByModelId(modelId);
+        return count > 0;
+    }
+
     public boolean updatePricingItem(PricingItem item) {
         int count = pricingItemMapper.updatePrice(item);
         return count > 0;

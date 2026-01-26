@@ -14,6 +14,8 @@ public interface ModelBindingMapper {
 
     int deleteById(Long id);
 
+    int deleteByModelId(Long modelId);
+
     ModelBinding selectById(Long id);
 
     List<ModelBinding> selectByModelId(Long modelId);
