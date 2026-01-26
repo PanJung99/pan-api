@@ -1,0 +1,54 @@
+
+spring:
+  application:
+    name: pan-api
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      # 启用文件上传（默认是 true，但最好显式声明）
+      enabled: true
+      # 单个文件最大限制：设置为 60MB，以确保高于您的 50MB 业务限制
+      max-file-size: 60MB
+      # 整个请求体最大限制：同样设置为 60MB
+      max-request-size: 60MB
+  web:
+    resources:
+      # 必须为 true（默认为 true，除非被显式关掉）
+      add-mappings: true
+
+
+server:
+  port: 8546
+
+mybatis-plus:
+  mapper-locations: "classpath*:mapper/*.xml"
+
+springdoc:
+  packages-to-scan: io.github.panjung99.panapi
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui/index.html
+    operations-sorter: method
+    tags-sorter: alpha
+    try-it-out-enabled: true
+    filter: true
+    default-model-rendering: model
+    display-request-duration: true
+    persist-authorization: true
+    enabled: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  show-actuator: false
+
+feign:
+  okhttp:
+    enabled: true
+  httpclient:
+    enabled: false
+  client:
+    config:
+      default:
+        loggerLevel: FULL  #查看完整的请求和响应信息

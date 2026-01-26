@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.panjung99.panapi.user.dao.BalanceMapper">
+
+    <resultMap id="balanceResultMap" type="io.github.panjung99.panapi.user.entity.Balance">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="currentBalance" column="current_balance"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO us_balance (
+            user_id, current_balance
+        ) VALUES (
+                     #{userId}, #{currentBalance}
+                 )
+    </insert>
+
+    <update id="update">
+        UPDATE us_balance
+        SET
+            current_balance = #{currentBalance},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <select id="findByUserId" resultMap="balanceResultMap">
+        SELECT * FROM us_balance
+        WHERE user_id = #{userId}
+    </select>
+
+    <update id="addBalance">
+        UPDATE us_balance
+        SET current_balance = current_balance + #{amount},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="deductBalance">
+        UPDATE us_balance
+        SET current_balance = current_balance - #{amount},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="increaseBalance">
+        UPDATE us_balance
+        SET current_balance = current_balance + #{amount},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="transferBalance">
+        <!-- 从源账户扣除 -->
+        UPDATE us_balance
+        SET current_balance = current_balance - #{amount},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{fromUserId} AND current_balance >= #{amount};
+
+        <!-- 向目标账户增加 -->
+        UPDATE us_balance
+        SET current_balance = current_balance + #{amount},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{toUserId};
+    </update>
+
+</mapper>

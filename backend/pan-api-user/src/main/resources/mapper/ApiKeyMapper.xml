@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.panjung99.panapi.user.dao.ApiKeyMapper">
+
+    <resultMap id="apiKeyResultMap" type="io.github.panjung99.panapi.user.entity.ApiKey">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="keyName" column="key_name"/>
+        <result property="apiKey" column="api_key"/>
+        <result property="quota" column="quota"/>
+        <result property="deleted" column="is_deleted"/>
+        <result property="lastUsed" column="last_used"/>
+        <result property="expireTime" column="expire_time"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO us_api_key (
+            user_id, key_name, api_key,
+            quota, expire_time
+        ) VALUES (
+            #{userId}, #{keyName}, #{apiKey},
+            #{quota}, #{expireTime}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE us_api_key
+        SET
+            key_name = #{keyName},
+            quota = #{quota},
+            is_deleted = #{deleted},
+            expire_time = #{expireTime},
+            last_used = #{lastUsed}
+        WHERE id = #{id}
+    </update>
+
+    <update id="softDelete">
+        UPDATE us_api_key
+        SET is_deleted = 1
+        WHERE id = #{id} AND user_id = #{userId}
+    </update>
+
+    <select id="selectById" resultMap="apiKeyResultMap">
+        SELECT * FROM us_api_key WHERE id = #{id}
+    </select>
+
+    <select id="selectByApiKey" resultMap="apiKeyResultMap">
+        SELECT * FROM us_api_key
+        WHERE api_key = #{apiKey} AND (is_deleted = 0 OR is_deleted IS NULL)
+    </select>
+
+    <select id="selectByUserId" resultMap="apiKeyResultMap">
+        SELECT * FROM us_api_key
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="selectActiveKeysByUserId" resultMap="apiKeyResultMap">
+        SELECT * FROM us_api_key
+        WHERE user_id = #{userId}
+          AND (is_deleted = 0 OR is_deleted IS NULL)
+    </select>
+
+</mapper>

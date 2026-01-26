@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    min-poolsize: 1
+    max-poolsize: 3
+    connect-timeout-ms: 3000
+    validate-timeout-ms: 3000
+
+jwt:
+  secret: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwMDEiLCJpYXQiOjE3NjgzNjg0MzMsImV4cCI6MTc2OTY2NDQzM30.aVOQi2_Ea8IuBpKvYzIyxxnMq5KeemZ6bpMRIkm_v0k

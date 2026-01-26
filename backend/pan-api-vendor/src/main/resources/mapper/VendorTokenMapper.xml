@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.panjung99.panapi.vendor.dao.VendorTokenMapper">
+
+    <resultMap id="VendorTokenResultMap" type="io.github.panjung99.panapi.vendor.entity.VendorToken">
+        <id property="id" column="id" />
+        <result property="vendorId" column="vendor_id" />
+        <result property="apiKey" column="api_key" />
+        <result property="tokenName" column="token_name" />
+        <result property="isActive" column="is_active" />
+        <result property="expiresAt" column="expires_at" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+    </resultMap>
+
+    <!-- 插入新Token -->
+    <insert id="insert" parameterType="io.github.panjung99.panapi.vendor.entity.VendorToken"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO ven_vendor_token
+            (vendor_id, api_key, token_name, is_active, expires_at)
+        VALUES
+            (#{vendorId}, #{apiKey}, #{tokenName}, #{isActive}, #{expiresAt})
+    </insert>
+
+    <!-- 根据ID动态更新Token -->
+    <update id="update" parameterType="io.github.panjung99.panapi.vendor.entity.VendorToken">
+        UPDATE ven_vendor_token
+        <set>
+            <if test="apiKey != null and apiKey != ''">api_key = #{apiKey},</if>
+            <if test="tokenName != null and tokenName != ''">token_name = #{tokenName},</if>
+            <if test="isActive != null">is_active = #{isActive},</if>
+            <if test="expiresAt != null">expires_at = #{expiresAt},</if>
+        </set>
+        WHERE id = #{id} AND vendor_id = #{vendorId}
+    </update>
+
+    <!-- 根据ID删除Token -->
+    <delete id="deleteById">
+        DELETE FROM ven_vendor_token WHERE id = #{id}
+    </delete>
+
+    <!-- 根据ID查询Token -->
+    <select id="findById" resultMap="VendorTokenResultMap">
+        SELECT * FROM ven_vendor_token WHERE id = #{id}
+    </select>
+
+    <select id="selectByVendorAndKey" resultMap="VendorTokenResultMap">
+        SELECT * FROM ven_vendor_token WHERE vendor_id = #{vendorId} AND api_key = #{apiKey}
+    </select>
+
+    <select id="selectByVendorId" resultMap="VendorTokenResultMap">
+        SELECT * FROM ven_vendor_token WHERE vendor_id = #{vendorId}
+    </select>
+
+    <select id="selectActiveByVendorId" resultMap="VendorTokenResultMap">
+        SELECT * FROM ven_vendor_token WHERE vendor_id = #{vendorId} AND is_active = 1
+    </select>
+
+</mapper>

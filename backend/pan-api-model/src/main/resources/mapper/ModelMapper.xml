@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.panjung99.panapi.model.dao.ModelMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.panjung99.panapi.model.entity.Model">
+        <id column="id"                          property="id" />
+        <result column="name"                    property="name" />
+        <result column="display_name"            property="displayName" />
+        <result column="is_free"                 property="isFree" />
+        <result column="category"                property="category" />
+        <result column="platform_type"           property="platformType" />
+        <result column="description"             property="description" />
+        <result column="is_active"               property="isActive" />
+        <result column="is_deleted"              property="isDeleted" />
+        <result column="created_at"              property="createdAt" />
+        <result column="updated_at"              property="updatedAt" />
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, display_name, is_free, category, platform_type, description,
+        is_active, is_deleted, created_at, updated_at
+    </sql>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM md_model
+        WHERE id = #{id} AND is_deleted = 0
+    </select>
+
+    <select id="selectByName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM md_model
+        WHERE name = #{name} AND is_deleted = 0
+    </select>
+
+    <select id="selectActiveByName" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM md_model
+        WHERE name = #{name} AND is_deleted = 0 AND is_active = 1
+    </select>
+
+    <select id="selectApiActive" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM md_model
+        WHERE is_active = 1 AND is_deleted = 0
+    </select>
+
+    <select id="selectApiAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List" />
+        FROM md_model
+        WHERE is_deleted = 0
+    </select>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO md_model
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="displayName != null and displayName != ''">display_name,</if>
+            <if test="isFree != null">is_free,</if>
+            <if test="category != null">category,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="isActive != null">is_active,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="displayName != null and displayName != ''">#{displayName},</if>
+            <if test="isFree != null">#{isFree},</if>
+            <if test="category != null">#{category},</if>
+            <if test="description != null and description != ''">#{description},</if>
+            <if test="isActive != null">#{isActive},</if>
+        </trim>
+    </insert>
+
+    <update id="logicalDelete">
+        UPDATE md_model
+        SET
+            is_deleted = 1,
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateIsActiveByName">
+        UPDATE md_model
+        SET is_active = #{isActive}, updated_at = NOW()
+        WHERE name = #{name} AND is_deleted = 0
+    </update>
+
+</mapper>

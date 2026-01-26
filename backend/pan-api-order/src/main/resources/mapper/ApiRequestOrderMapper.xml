@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.panjung99.panapi.order.dao.ApiRequestOrderMapper">
+
+    <resultMap id="apiRequestOrderMap" type="io.github.panjung99.panapi.order.entity.ApiRequestOrder">
+        <id property="id" column="id" />
+        <result property="reqId" column="req_id" />
+        <result property="userId" column="user_id" />
+        <result property="apiKeyId" column="api_key_id" />
+        <result property="clientIp" column="client_ip" />
+        <result property="reqPath" column="req_path" />
+        <result property="reqStream" column="req_stream" />
+        <result property="modelId" column="model_id" />
+        <result property="modelName" column="model_name" />
+        <result property="modelType" column="model_type" />
+        <result property="respModelName" column="resp_model_name" />
+        <result property="respModelId" column="resp_model_id" />
+        <result property="respVendorId" column="resp_vendor_id" />
+        <result property="finishReason" column="finish_reason" />
+        <result property="promptTokens" column="prompt_tokens" />
+        <result property="completionTokens" column="completion_tokens" />
+        <result property="totalTokens" column="total_tokens" />
+        <result property="systemFingerprint" column="system_fingerprint" />
+        <result property="statusCode" column="status_code" />
+        <result property="errorMessage" column="error_message" />
+        <result property="latencyMs" column="latency_ms" />
+        <result property="createdAt" column="created_at" />
+        <result property="serverTime" column="server_time" />
+        <result property="orderCost" column="order_cost" />
+        <result property="orderAmount" column="order_amount" />
+        <result property="syncStatus" column="sync_status" />
+        <result property="vendorOrderNo" column="vendor_order_no" />
+        <result property="syncRetryCount" column="sync_retry_count" />
+        <result property="lastSyncTime" column="last_sync_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, req_id, user_id, api_key_id, client_ip, req_path, req_stream, model_id, model_name,
+        model_type, resp_model_name, resp_model_id, resp_vendor_id, finish_reason, prompt_tokens,
+        completion_tokens, total_tokens, system_fingerprint, status_code, error_message,
+        latency_ms, created_at, server_time, order_cost, order_amount, sync_status,
+        vendor_order_no, sync_retry_count, last_sync_time
+    </sql>
+
+    <insert id="insert" parameterType="io.github.panjung99.panapi.order.entity.ApiRequestOrder"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO or_api_request_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reqId != null">req_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="apiKeyId != null">api_key_id,</if>
+            <if test="clientIp != null">client_ip,</if>
+            <if test="reqPath != null">req_path,</if>
+            <if test="reqStream != null">req_stream,</if>
+            <if test="modelId != null">model_id,</if>
+            <if test="modelName != null">model_name,</if>
+            <if test="modelType != null">model_type,</if>
+            <if test="respModelName != null">resp_model_name,</if>
+            <if test="respModelId != null">resp_model_id,</if>
+            <if test="respVendorId != null">resp_vendor_id,</if>
+            <if test="finishReason != null">finish_reason,</if>
+            <if test="promptTokens != null">prompt_tokens,</if>
+            <if test="completionTokens != null">completion_tokens,</if>
+            <if test="totalTokens != null">total_tokens,</if>
+            <if test="systemFingerprint != null">system_fingerprint,</if>
+            <if test="statusCode != null">status_code,</if>
+            <if test="errorMessage != null">error_message,</if>
+            <if test="latencyMs != null">latency_ms,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="orderCost != null">order_cost,</if>
+            <if test="orderAmount != null">order_amount,</if>
+            <if test="syncStatus != null">sync_status,</if>
+            <if test="vendorOrderNo != null">vendor_order_no,</if>
+            <if test="syncRetryCount != null">sync_retry_count,</if>
+            <if test="lastSyncTime != null">last_sync_time,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="reqId != null">#{reqId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="apiKeyId != null">#{apiKeyId},</if>
+            <if test="clientIp != null">#{clientIp},</if>
+            <if test="reqPath != null">#{reqPath},</if>
+            <if test="reqStream != null">#{reqStream},</if>
+            <if test="modelId != null">#{modelId},</if>
+            <if test="modelName != null">#{modelName},</if>
+            <if test="modelType != null">#{modelType},</if>
+            <if test="respModelName != null">#{respModelName},</if>
+            <if test="respModelId != null">#{respModelId},</if>
+            <if test="respVendorId != null">#{respVendorId},</if>
+            <if test="finishReason != null">#{finishReason},</if>
+            <if test="promptTokens != null">#{promptTokens},</if>
+            <if test="completionTokens != null">#{completionTokens},</if>
+            <if test="totalTokens != null">#{totalTokens},</if>
+            <if test="systemFingerprint != null">#{systemFingerprint},</if>
+            <if test="statusCode != null">#{statusCode},</if>
+            <if test="errorMessage != null">#{errorMessage},</if>
+            <if test="latencyMs != null">#{latencyMs},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="orderCost != null">#{orderCost},</if>
+            <if test="orderAmount != null">#{orderAmount},</if>
+            <if test="syncStatus != null">#{syncStatus},</if>
+            <if test="vendorOrderNo != null">#{vendorOrderNo},</if>
+            <if test="syncRetryCount != null">#{syncRetryCount},</if>
+            <if test="lastSyncTime != null">#{lastSyncTime},</if>
+        </trim>
+    </insert>
+
+
+    <select id="selectByReqId" resultMap="apiRequestOrderMap" parameterType="String">
+        SELECT <include refid="Base_Column_List" />
+        FROM or_api_request_order
+        WHERE req_id = #{reqId}
+    </select>
+
+    <select id="sumTodayTokenByUserId" parameterType="Long">
+        SELECT IFNULL(SUM(total_tokens), 0) FROM or_api_request_order
+        WHERE user_id = #{userId}
+          AND created_at >= CURDATE()
+    </select>
+
+    <select id="sumTodayRequestByUserId" resultType="Long">
+        SELECT COUNT(1)
+        FROM or_api_request_order
+        WHERE user_id = #{userId}
+        AND created_at >= CURDATE()
+    </select>
+
+
+    <select id="selectApiOrderList"
+            resultType="io.github.panjung99.panapi.common.dto.admin.ApiOrderResp"
+            parameterType="map">
+        SELECT
+        req_id AS reqId,
+        total_tokens AS totalTokens,
+        created_at AS callTime,
+        user_id AS userId,
+        order_amount AS amount,
+        order_cost AS cost,
+        model_name AS modelName,
+        req_path AS apiType
+        FROM or_api_request_order aro
+        WHERE status_code = 200
+        <if test="startDate != null">
+            AND created_at &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            AND created_at &lt;= #{endDate}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <!-- 更新订单同步状态 -->
+    <update id="updateSyncStatus">
+        UPDATE or_api_request_order
+        SET sync_status = #{syncStatus},
+            last_sync_time = #{lastSyncTime}
+            <if test="errorMessage != null">
+                ,error_message = #{errorMessage}
+            </if>
+        WHERE req_id = #{reqId}
+    </update>
+
+    <!-- 更新订单金额和响应内容 -->
+    <update id="updateOrderAmount">
+        UPDATE or_api_request_order
+        SET order_amount = #{orderAmount},
+            resp_content = #{respContent}
+        WHERE req_id = #{reqId}
+    </update>
+
+    <!-- 更新订单重试次数 -->
+    <update id="updateRetryCount">
+        UPDATE or_api_request_order
+        SET sync_retry_count = #{retryCount}
+        WHERE req_id = #{reqId}
+    </update>
+
+
+    <update id="updateSyncStatusAndRetryCount">
+        UPDATE or_api_request_order
+        SET sync_status = #{syncStatus},
+            sync_retry_count = #{retryCount},
+            error_message = #{errorMessage},
+            updated_at = #{updatedAt}
+        WHERE req_id = #{reqId}
+    </update>
+</mapper>

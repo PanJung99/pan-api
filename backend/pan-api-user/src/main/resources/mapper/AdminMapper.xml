@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.panjung99.panapi.user.dao.AdminMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.panjung99.panapi.user.entity.Admin">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_id, create_time, update_time
+    </sql>
+
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM us_admin
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="io.github.panjung99.panapi.user.entity.Admin" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO us_admin (user_id, create_time, update_time)
+        VALUES (#{userId}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="io.github.panjung99.panapi.user.entity.Admin">
+        UPDATE us_admin
+        SET user_id = #{userId},
+            update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM us_admin WHERE id = #{id}
+    </delete>
+
+</mapper>

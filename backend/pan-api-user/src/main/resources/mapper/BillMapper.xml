@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.panjung99.panapi.user.dao.BillMapper">
+
+    <resultMap id="billResultMap" type="io.github.panjung99.panapi.user.entity.Bill">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="apiKeyId" column="api_key_id"/>
+        <result property="billType" column="bill_type"/>
+        <result property="amount" column="amount"/>
+        <result property="beforeBalance" column="before_balance"/>
+        <result property="afterBalance" column="after_balance"/>
+        <result property="relatedId" column="related_id"/>
+        <result property="description" column="description"/>
+        <result property="modelTagId" column="model_tag_id"/>
+        <result property="modelTagName" column="model_tag_name"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <!-- BillVO的resultMap -->
+    <resultMap id="billVOResultMap" type="io.github.panjung99.panapi.common.dto.be.BillVO">
+        <id property="id" column="id"/>
+        <result property="billType" column="bill_type"/>
+        <result property="amount" column="amount"/>
+        <result property="relatedId" column="related_id"/>
+        <result property="description" column="description"/>
+        <result property="modelTagId" column="model_tag_id"/>
+        <result property="modelTagName" column="model_tag_name"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="io.github.panjung99.panapi.user.entity.Bill"
+            useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO us_bill
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="apiKeyId != null">api_key_id,</if>
+            <if test="billType != null">bill_type,</if>
+            <if test="amount != null">amount,</if>
+            <if test="beforeBalance != null">before_balance,</if>
+            <if test="afterBalance != null">after_balance,</if>
+            <if test="relatedId != null">related_id,</if>
+            <if test="description != null">description,</if>
+            <if test="modelTagId != null">model_tag_id,</if>
+            <if test="modelTagName != null">model_tag_name,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="apiKeyId != null">#{apiKeyId},</if>
+            <if test="billType != null">#{billType},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="beforeBalance != null">#{beforeBalance},</if>
+            <if test="afterBalance != null">#{afterBalance},</if>
+            <if test="relatedId != null">#{relatedId},</if>
+            <if test="description != null">#{description},</if>
+            <if test="modelTagId != null">#{modelTagId},</if>
+            <if test="modelTagName != null">#{modelTagName},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 分页查询带条件的用户账单（返回BillVO） -->
+    <select id="selectBillVOPageByCondition" resultMap="billVOResultMap">
+        SELECT *
+        FROM us_bill
+        WHERE user_id = #{userId}
+        <if test="billType != null and billType != ''">
+            AND bill_type = #{billType}
+        </if>
+        <if test="startTime != null">
+            <![CDATA[ AND create_time >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            <![CDATA[ AND create_time <= #{endTime} ]]>
+        </if>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findByUserId" resultMap="billResultMap">
+        SELECT * FROM us_bill
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findByApiKeyId" resultMap="billResultMap">
+        SELECT * FROM us_bill
+        WHERE api_key_id = #{apiKeyId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="findByTypeAndDateRange" resultMap="billResultMap">
+        SELECT * FROM us_bill
+        WHERE user_id = #{userId}
+          AND bill_type = #{billType}
+          AND create_time BETWEEN #{startTime} AND #{endTime}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="sumAmountByUserAndType" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(amount), 0)
+        FROM us_bill
+        WHERE user_id = #{userId}
+          AND bill_type = #{billType}
+    </select>
+
+    <!-- 使用DTO接收结果 -->
+    <select id="selectConsumptionStatsByTimeRange" resultType="io.github.panjung99.panapi.common.dto.be.BillStatsDto$BillStats">
+        SELECT
+        COALESCE(SUM(ABS(amount)), 0) as totalAmount,
+        COUNT(*) as transactionCount
+        FROM us_bill
+        WHERE user_id = #{userId}
+        AND bill_type IN (2, 99)
+        AND <![CDATA[ create_time >= #{startTime} ]]>
+        AND <![CDATA[ create_time < #{endTime} ]]>
+    </select>
+</mapper>

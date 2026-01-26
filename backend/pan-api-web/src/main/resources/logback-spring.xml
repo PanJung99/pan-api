@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Spring Boot 默认的配置 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <!-- 日志文件路径 -->
+    <property name="LOG_PATH" value="${LOG_PATH:-/logs}" />
+    <property name="LOG_FILE" value="${LOG_FILE:-${LOG_PATH}/pan-api.log}" />
+
+    <!-- 开发环境配置 -->
+    <springProfile name="dev">
+        <property name="LOG_LEVEL" value="INFO" />
+    </springProfile>
+
+    <!-- 生产环境配置 -->
+    <springProfile name="prod">
+        <property name="LOG_LEVEL" value="INFO" />
+    </springProfile>
+
+    <!-- 默认日志级别 -->
+    <property name="LOG_LEVEL" value="${LOG_LEVEL:-INFO}" />
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 文件输出 - 所有日志 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 日志轮转策略：按日期和大小 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${LOG_PATH}/pan-api-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 单个日志文件最大大小：100MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 日志保留天数：30天 -->
+            <maxHistory>30</maxHistory>
+            <!-- 所有日志文件的总大小限制：10GB -->
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 文件输出 - 错误日志 -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/pan-api-error.log</file>
+        <!-- 只记录 ERROR 及以上级别 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/pan-api-error-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 异步输出 - 提高性能 -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 队列深度，默认512 -->
+        <queueSize>512</queueSize>
+        <!-- 队列满时是否丢弃日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 关闭应用时等待日志处理完成 -->
+        <includeCallerData>false</includeCallerData>
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <!-- 异步输出 - 错误日志 -->
+    <appender name="ASYNC_ERROR_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="ERROR_FILE" />
+    </appender>
+
+    <!-- 指定某些包的日志级别 -->
+    <!-- 开发环境特定配置 -->
+    <springProfile name="dev">
+        <!-- Spring 框架日志 -->
+        <logger name="org.springframework" level="INFO" />
+        <logger name="org.springframework.security" level="DEBUG" />
+        
+        <!-- MyBatis Plus 日志 -->
+        <logger name="com.baomidou.mybatisplus" level="INFO" />
+        <logger name="com.baomidou.mybatisplus.core.MybatisConfiguration" level="DEBUG" />
+        
+        <!-- 数据库日志 -->
+        <logger name="com.mysql.cj" level="WARN" />
+        
+        <!-- Feign 和 OkHttp 日志 -->
+        <logger name="org.springframework.cloud.openfeign" level="DEBUG" />
+        <logger name="feign" level="DEBUG" />
+        <logger name="okhttp3" level="DEBUG" />
+        <logger name="com.squareup.okhttp3" level="DEBUG" />
+        
+        <!-- 应用自身日志 -->
+        <logger name="io.github.panjung99.panapi" level="DEBUG" />
+    </springProfile>
+
+    <!-- 生产环境特定配置 -->
+    <springProfile name="prod">
+        <!-- Spring 框架日志 -->
+        <logger name="org.springframework" level="WARN" />
+        <logger name="org.springframework.security" level="WARN" />
+        
+        <!-- MyBatis Plus 日志 -->
+        <logger name="com.baomidou.mybatisplus" level="INFO" />
+        
+        <!-- 数据库日志 -->
+        <logger name="com.mysql.cj" level="WARN" />
+        
+        <!-- 应用自身日志 -->
+        <logger name="io.github.panjung99.panapi" level="INFO" />
+    </springProfile>
+
+    <!-- 开发环境：输出到控制台 + 文件 -->
+    <springProfile name="dev">
+        <root level="${LOG_LEVEL}">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="ASYNC_FILE" />
+            <appender-ref ref="ASYNC_ERROR_FILE" />
+        </root>
+    </springProfile>
+
+    <!-- 生产环境：只输出到文件（异步） -->
+    <springProfile name="prod">
+        <root level="${LOG_LEVEL}">
+            <appender-ref ref="ASYNC_FILE" />
+            <appender-ref ref="ASYNC_ERROR_FILE" />
+        </root>
+    </springProfile>
+
+    <!-- 默认配置 -->
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ASYNC_FILE" />
+        <appender-ref ref="ASYNC_ERROR_FILE" />
+    </root>
+</configuration>
