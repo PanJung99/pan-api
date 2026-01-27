@@ -3,7 +3,7 @@ package io.github.panjung99.panapi.web.service;
 import io.github.panjung99.panapi.common.dto.be.RechargePlanResp;
 import io.github.panjung99.panapi.common.dto.be.UserProfileResp;
 import io.github.panjung99.panapi.common.dto.be.UserResp;
-import io.github.panjung99.panapi.common.enums.PlatformEnum;
+import io.github.panjung99.panapi.common.enums.PlatformTypeEnum;
 import io.github.panjung99.panapi.order.service.ApiRequestOrderService;
 import io.github.panjung99.panapi.user.entity.RechargePlan;
 import io.github.panjung99.panapi.user.entity.User;
@@ -45,7 +45,7 @@ public class BackendService {
      * @return list of model type with their names, descriptions, icon URLs
      */
     public List<Map<String, String>> modelTypeList() {
-        return Arrays.stream(PlatformEnum.values())
+        return Arrays.stream(PlatformTypeEnum.values())
                 .map(en -> {
                     Map<String, String> map = new HashMap<>();
                     map.put("code", en.name());

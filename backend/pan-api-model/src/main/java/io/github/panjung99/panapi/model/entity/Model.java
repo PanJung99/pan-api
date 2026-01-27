@@ -1,10 +1,9 @@
 package io.github.panjung99.panapi.model.entity;
 
 import io.github.panjung99.panapi.common.enums.ModelCategory;
-import io.github.panjung99.panapi.common.enums.PlatformEnum;
+import io.github.panjung99.panapi.common.enums.PlatformTypeEnum;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -41,7 +40,7 @@ public class Model {
     /**
      * 模型厂商：deepseek、chatgpt、glm等等
      */
-    private PlatformEnum platformType;
+    private PlatformTypeEnum platformType;
 
     /**
      * 模型描述

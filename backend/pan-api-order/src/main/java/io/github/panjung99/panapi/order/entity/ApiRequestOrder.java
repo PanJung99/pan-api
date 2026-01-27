@@ -36,11 +36,7 @@ public class ApiRequestOrder {
     private LocalDateTime createdAt;         // 请求时间
     private LocalDateTime serverTime;        // 服务端接收时间
 
-    private BigDecimal orderCost;       // 订单成本
     private BigDecimal orderAmount;     // 订单金额（用户实付金额）
-    private Integer syncStatus;         // 同步状态：0-未同步 1-同步中 2-已同步 3-同步失败
     private String vendorOrderNo;       // 下游服务商订单号
-    private Integer syncRetryCount;     // 同步重试次数
-    private LocalDateTime lastSyncTime; // 最后同步时间
 
 }

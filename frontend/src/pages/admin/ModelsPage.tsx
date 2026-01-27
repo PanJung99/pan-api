@@ -104,9 +104,10 @@ export function AdminModelsPage() {
       await adminService.toggleModelStatus(modelId, { enabled: newStatus })
       toast.success(newStatus ? "模型已启用" : "模型已禁用")
       fetchData()
-    } catch (error) {
+    } catch (error: any) {
       console.error("切换模型状态失败:", error)
-      toast.error("切换模型状态失败，请稍后重试")
+      const errorMessage = error.response?.data?.desc || error.message || "切换模型状态失败，请稍后重试"
+      toast.error(errorMessage)
     }
   }
 

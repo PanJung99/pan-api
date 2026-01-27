@@ -129,9 +129,10 @@ export function ModelUpdateDialog({ open, onOpenChange, model, onUpdated }: Prop
       toast.success("更新成功")
       onOpenChange(false)
       onUpdated?.()
-    } catch (error) {
+    } catch (error: any) {
       console.error("更新模型失败:", error)
-      toast.error("更新模型失败，请稍后重试")
+      const errorMessage = error.response?.data?.desc || error.message || "更新模型失败，请稍后重试"
+      toast.error(errorMessage)
     } finally {
       setSubmitting(false)
     }

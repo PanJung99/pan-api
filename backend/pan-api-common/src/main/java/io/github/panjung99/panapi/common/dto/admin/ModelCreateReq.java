@@ -1,7 +1,7 @@
 package io.github.panjung99.panapi.common.dto.admin;
 
 import io.github.panjung99.panapi.common.enums.ModelCategory;
-import io.github.panjung99.panapi.common.enums.PlatformEnum;
+import io.github.panjung99.panapi.common.enums.PlatformTypeEnum;
 import io.github.panjung99.panapi.common.enums.UnitEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -33,7 +33,7 @@ public class ModelCreateReq {
 
     @Schema(description = "模型厂商", example = "DEEP_SEEK")
     @NotNull(message = "模型厂商不能为空")
-    private PlatformEnum platformType;
+    private PlatformTypeEnum platformType;
 
     @Schema(description = "模型描述", example = "DeepSeek推出的首个将思考融入工具使用的模型，并且同时支持思考模式与非思考模式的工具调用，智能水平与 GPT-5 相当")
     private String description;

@@ -32,44 +32,6 @@ public interface ApiRequestOrderMapper {
                                            @Param("endDate") LocalDateTime endDate);
 
 
-    /**
-     * 更新订单同步状态
-     * @param reqId 请求ID
-     * @param syncStatus 同步状态
-     * @param errorMessage 错误信息
-     * @param lastSyncTime 最后同步时间
-     * @return 更新记录数
-     */
-    int updateSyncStatus(@Param("reqId") String reqId,
-                         @Param("syncStatus") Integer syncStatus,
-                         @Param("errorMessage") String errorMessage,
-                         @Param("lastSyncTime") LocalDateTime lastSyncTime);
 
-    /**
-     * 更新订单金额和响应内容
-     * @param reqId 请求ID
-     * @param orderAmount 订单金额
-     * @param respContent 响应内容
-     * @return 更新记录数
-     */
-    int updateOrderAmount(@Param("reqId") String reqId,
-                          @Param("orderAmount") BigDecimal orderAmount,
-                          @Param("respContent") String respContent);
-
-    /**
-     * 更新订单重试次数
-     * @param reqId 请求ID
-     * @param retryCount 重试次数
-     * @return 更新记录数
-     */
-    int updateRetryCount(@Param("reqId") String reqId,
-                         @Param("retryCount") Integer retryCount);
-
-
-
-    /**
-     * 更新订单状态、重试次数和错误信息
-     */
-    int updateSyncStatusAndRetryCount(@Param("reqId") String reqId, @Param("syncStatus") Integer syncStatus, @Param("retryCount") Integer retryCount, @Param("errorMessage") String errorMessage, @Param("updatedAt") LocalDateTime updatedAt);
 
 }

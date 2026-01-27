@@ -55,7 +55,7 @@ public class AdminVendorController {
         List<Map<String, String>> types = Arrays.stream(VenTypeEnum.values())
                 .map(en -> {
                     Map<String, String> map = new HashMap<>();
-                    map.put("type", en.getType());
+                    map.put("type", en.name());
                     map.put("description", en.getDescription());
                     return map;
                 }).toList();

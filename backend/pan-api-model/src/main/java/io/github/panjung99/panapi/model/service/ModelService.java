@@ -27,6 +27,10 @@ public class ModelService {
 
     @Transactional(rollbackFor = Exception.class)
     public String createModel(ModelCreateReq req) {
+        if (modelMapper.selectByName(req.getName()) != null) {
+            throw new AppException(ErrorEnum.MODEL_ALREADY_EXISTS);
+        }
+
         Model model = new Model();
         model.setName(req.getName());
         model.setDisplayName(req.getDisplayName());
@@ -35,6 +39,7 @@ public class ModelService {
         model.setPlatformType(req.getPlatformType());
         model.setDescription(req.getDescription());
         model.setIsActive(1);
+        modelMapper.insert(model);
         Long modelId = model.getId();
 
         if (req.getVendorModelIds() != null) {

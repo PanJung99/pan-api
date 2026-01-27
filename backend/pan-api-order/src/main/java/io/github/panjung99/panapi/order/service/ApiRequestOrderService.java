@@ -73,9 +73,7 @@ public class ApiRequestOrderService {
         order.setStatusCode(200);
 
         order.setOrderAmount(amount);
-        order.setSyncStatus(2);
         order.setVendorOrderNo(vendorOrderNo);
-        order.setSyncRetryCount(0);
 
         try {
             int result = orderMapper.insert(order);
@@ -120,41 +118,4 @@ public class ApiRequestOrderService {
         return orderMapper.selectApiOrderList(page, startDate, endDate);
     }
 
-
-    /**
-     * 更新订单同步状态
-     * 
-     * @param reqId 请求ID
-     * @param syncStatus 同步状态
-     * @param errorMessage 错误信息（可选）
-     */
-    @Transactional
-    public void updateSyncStatus(String reqId, Integer syncStatus, String errorMessage) {
-        orderMapper.updateSyncStatus(reqId, syncStatus, errorMessage, LocalDateTime.now());
-    }
-
-
-    /**
-     * 更新订单同步状态、重试次数和错误信息（用于异步任务失败时）
-     *
-     * @param reqId 请求ID
-     * @param syncStatus 同步状态
-     * @param retryCount 重试次数
-     * @param errorMessage 错误信息
-     */
-    @Transactional
-    public void updateSyncStatusAndRetryCount(String reqId, Integer syncStatus, Integer retryCount, String errorMessage) {
-        orderMapper.updateSyncStatusAndRetryCount(reqId, syncStatus, retryCount, errorMessage, LocalDateTime.now());
-    }
-
-    /**
-     * 更新订单重试次数
-     * 
-     * @param reqId 请求ID
-     * @param retryCount 重试次数
-     */
-    @Transactional
-    public void updateRetryCount(String reqId, Integer retryCount) {
-        orderMapper.updateRetryCount(reqId, retryCount);
-    }
 }

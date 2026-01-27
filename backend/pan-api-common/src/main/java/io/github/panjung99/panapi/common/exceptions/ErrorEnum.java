@@ -17,6 +17,8 @@ public enum ErrorEnum {
     UNSUPPORTED_MODEL(HttpStatus.BAD_REQUEST, 40001, "The model does not supported",
             ApiError.of("unsupported_model", "invalid_request_error", null)),
 
+    MODEL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, 40002, "该模型名已存在",
+            null),
 
     // ==================== 401 ====================
 

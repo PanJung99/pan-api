@@ -18,6 +18,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.WebUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,14 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            Cookie userInfo = null;
-            if (request.getCookies() != null) {
-                for (Cookie c: request.getCookies()) {
-                    if ("usif".equals(c.getName())) {
-                        userInfo = c;
-                    }
-                }
-            }
+            Cookie userInfo = WebUtils.getCookie(request, "usif");
             if (userInfo == null || !StringUtils.hasText(userInfo.getValue())) {
                 throw new AppException(ErrorEnum.UNAUTHORIZED_ERROR);
             }
@@ -70,7 +64,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(auth);
         } catch (AppException e) {
-            //不做处理，交给EntryPoint处理TODO
+            // 交给EntryPoint处理
         }finally {
             filterChain.doFilter(request, response);
         }

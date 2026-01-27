@@ -87,9 +87,10 @@ export function VendorCreateDialog({ open, onOpenChange, onCreated }: Props) {
       alert("创建成功")
       onOpenChange(false)
       onCreated?.()
-    } catch (e) {
-      console.error("创建服务商失败:", e)
-      alert("创建服务商失败，请稍后重试")
+    } catch (error: any) {
+      console.error("创建服务商失败:", error)
+      const errorMessage = error.response?.data?.desc || error.message || "创建服务商失败，请稍后重试"
+      alert(errorMessage)
     } finally {
       setSubmitting(false)
     }

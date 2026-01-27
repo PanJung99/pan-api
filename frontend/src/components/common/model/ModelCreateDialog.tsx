@@ -104,9 +104,10 @@ export function ModelCreateDialog({ open, onOpenChange, onCreated }: Props) {
       toast.success("创建成功")
       onOpenChange(false)
       onCreated?.()
-    } catch (error) {
+    } catch (error: any) {
       console.error("创建模型失败:", error)
-      toast.error("创建模型失败，请稍后重试")
+      const errorMessage = error.response?.data?.desc || error.message || "创建模型失败，请稍后重试"
+      toast.error(errorMessage)
     } finally {
       setSubmitting(false)
     }
