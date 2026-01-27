@@ -19,7 +19,6 @@
         <result column="api_key"    property="apiKey"/>
         <result column="token_name" property="tokenName"/>
         <result column="is_active"  property="isActive"/>
-        <result column="expires_at" property="expiresAt"/>
     </resultMap>
 
     <resultMap id="VendorReq" type="io.github.panjung99.panapi.common.dto.admin.VendorResp">
@@ -64,8 +63,7 @@
             t.vendor_id,
             t.api_key,
             t.token_name,
-            t.is_active,
-            t.expires_at
+            t.is_active
         FROM ven_vendor v
                  LEFT JOIN ven_vendor_token t
                            ON v.id = t.vendor_id

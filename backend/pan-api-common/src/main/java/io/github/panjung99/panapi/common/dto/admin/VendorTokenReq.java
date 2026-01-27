@@ -11,5 +11,4 @@ public class VendorTokenReq {
     private String apiKey;     // API密钥
     private String tokenName;  // Token名称
     private Boolean isActive;  // 是否启用
-    private LocalDateTime expiresAt;    // 过期时间
 }

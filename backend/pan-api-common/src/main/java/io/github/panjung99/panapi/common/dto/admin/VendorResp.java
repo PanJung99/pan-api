@@ -19,7 +19,7 @@ public class VendorResp {
     @Schema(description = "API基础地址", example = "https://api.openai.com/v1")
     private String apiBaseUrl;
 
-    @Schema(description = "服务商类型", example = "OPENAI")
+    @Schema(description = "服务商类型", example = "OPEN_AI")
     private VenTypeEnum venType;
 
     private List<VendorTokenReq> tokens;  // 一对多 Token 列表

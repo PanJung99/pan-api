@@ -17,7 +17,6 @@ CREATE TABLE `ven_vendor_token` (
   `api_key` VARCHAR(255) NOT NULL COMMENT 'API密钥',
   `token_name` VARCHAR(100) COMMENT 'Token名称/描述',
   `is_active` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '是否激活：0-禁用 1-启用',
-  `expires_at` DATETIME COMMENT '过期时间',
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),

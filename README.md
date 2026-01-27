@@ -6,9 +6,9 @@
 **开发中，请不要直接在生产环境使用**
 
 TODO
+- 接入chatgpt 火山引擎
+- 将CommonReq重构，符合OpenAI标准格式并抽出来， 将deepseek单独创建一个Req， 编写Common和deepseek的转换器
 - 缓存从本地改为redis
-- ModelType改为枚举
-- 完善datetime格式以及解析逻辑
 - api限额、日期
 - 雪花算法重新设计
 - jwt完善
