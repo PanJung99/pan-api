@@ -7,13 +7,13 @@
 
 TODO
 - 接入chatgpt 火山引擎
-- 将CommonReq重构，符合OpenAI标准格式并抽出来， 将deepseek单独创建一个Req， 编写Common和deepseek的转换器
-- 缓存从本地改为redis
-- api限额、日期
+- 核对deepseek字段
+- response也拆成common和deepseek、openai的
+- 重构webclientprovider 调整feign配置
+- 准备编写路由算法
+- api去除限额和日期
 - 雪花算法重新设计
-- jwt完善
 - CI 中自动生成 & 校验 docs/openapi.json
-- yaml脱敏
 - 清除所有Mysql NOW()
 - venderType删除掉或者根据 火山 openai等重构
 - 前端创建服务商逻辑不够优雅，希望能在VendorCreateDialog中不写像这种
