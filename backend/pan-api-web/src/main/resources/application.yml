@@ -42,13 +42,3 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   show-actuator: false
-
-feign:
-  okhttp:
-    enabled: true
-  httpclient:
-    enabled: false
-  client:
-    config:
-      default:
-        loggerLevel: FULL  #查看完整的请求和响应信息

@@ -18,8 +18,6 @@ public class VendorTokenService {
 
     private final VendorTokenMapper vendorTokenMapper;
 
-    private final WebClientProvider webClientProvider;
-
     /**
      * TODO token路由功能应完善并迁移到router模块中
      * @param vendorId
@@ -50,8 +48,6 @@ public class VendorTokenService {
         token.setIsActive(1L);
         token.setExpiresAt(req.getExpiresAt());
         vendorTokenMapper.insert(token);
-
-        webClientProvider.refreshVendorWebClients();
     }
 
 
@@ -68,11 +64,7 @@ public class VendorTokenService {
         token.setIsActive(reqDto.getIsActive());
         token.setExpiresAt(reqDto.getExpiresAt());
 
-        boolean result = vendorTokenMapper.update(token) > 0;
-        if (result) {
-            webClientProvider.refreshVendorWebClients();
-        }
-        return result;
+        return vendorTokenMapper.update(token) > 0;
     }
 
     /**
@@ -81,10 +73,6 @@ public class VendorTokenService {
      * @return success or fail
      */
     public boolean deleteToken(Long id) {
-        boolean result = vendorTokenMapper.deleteById(id) > 0;
-        if (result) {
-            webClientProvider.refreshVendorWebClients();
-        }
-        return result;
+        return vendorTokenMapper.deleteById(id) > 0;
     }
 }

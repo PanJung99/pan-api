@@ -6,6 +6,8 @@ import io.github.panjung99.panapi.vendor.dao.VendorMapper;
 import io.github.panjung99.panapi.common.dto.admin.VendorResp;
 import io.github.panjung99.panapi.vendor.entity.Vendor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,7 @@ public class VendorService {
      * @param vendorId vendor id
      * @return venTypeEnum, if not found vendor or param is null.
      */
+    @Cacheable(value = "vendorType", key = "#vendorId")
     public VenTypeEnum getVendorType(Long vendorId) {
         Vendor vendor = vendorMapper.selectById(vendorId);
         if (vendor == null) {
@@ -32,10 +35,11 @@ public class VendorService {
     }
 
     /**
-     * Retrieves all vendors
+     * Retrieves the vendor info by id.
      */
-    public List<Vendor> getVendors() {
-        return vendorMapper.selectAllActive();
+    @Cacheable(value = "vendor", key = "#id")
+    public Vendor getVendorById(Long id) {
+        return vendorMapper.selectById(id);
     }
 
     /**
@@ -48,6 +52,7 @@ public class VendorService {
     /**
      * Create new Vendor.
      */
+    @CacheEvict(value = {"vendor", "vendorType"}, allEntries = true)
     public void createVendor(VendorCreateReq req) {
         Vendor vendor = Vendor.builder()
                 .name(req.getName())

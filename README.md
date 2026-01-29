@@ -7,11 +7,8 @@
 
 TODO
 - 接入chatgpt 火山引擎
-- 核对deepseek字段
 - response也拆成common和deepseek、openai的
-- 重构webclientprovider 调整feign配置
 - 准备编写路由算法
-- api去除限额和日期
 - 雪花算法重新设计
 - CI 中自动生成 & 校验 docs/openapi.json
 - 清除所有Mysql NOW()

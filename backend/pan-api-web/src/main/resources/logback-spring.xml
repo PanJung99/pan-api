@@ -99,12 +99,6 @@
         <!-- 数据库日志 -->
         <logger name="com.mysql.cj" level="WARN" />
         
-        <!-- Feign 和 OkHttp 日志 -->
-        <logger name="org.springframework.cloud.openfeign" level="DEBUG" />
-        <logger name="feign" level="DEBUG" />
-        <logger name="okhttp3" level="DEBUG" />
-        <logger name="com.squareup.okhttp3" level="DEBUG" />
-        
         <!-- 应用自身日志 -->
         <logger name="io.github.panjung99.panapi" level="DEBUG" />
     </springProfile>
