@@ -46,8 +46,6 @@ public class ApiKeyService {
                 .builder()
                 .userId(userId)
                 .keyName(requestDto.getKeyName())
-                .quota(requestDto.getQuota() == null? BigDecimal.ZERO: requestDto.getQuota()) // Default value: 0
-                .expireTime(requestDto.getExpireTime())
                 .createTime(LocalDateTime.now())
                 .deleted(false)
                 .apiKey(UUIDUtil.randomUUID())
@@ -74,7 +72,6 @@ public class ApiKeyService {
         dto.setId(apiKey.getId());
         dto.setKeyName(apiKey.getKeyName());
         dto.setApiKey(apiKey.getApiKey());
-        dto.setQuota(apiKey.getQuota());
         dto.setCreateTime(apiKey.getCreateTime());
         return dto;
     }
