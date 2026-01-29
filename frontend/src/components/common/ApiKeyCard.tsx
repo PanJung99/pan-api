@@ -30,9 +30,6 @@ export function ApiKeyCard({ apiKey, onDelete, onCopy }: ApiKeyCardProps) {
             )}
           </div>
         </div>
-        <div>
-          <p className="text-sm text-muted-foreground">限额: {apiKey.quota}</p>
-        </div>
         <Button variant="destructive" size="sm" onClick={() => onDelete(apiKey.id)}>
           删除
         </Button>

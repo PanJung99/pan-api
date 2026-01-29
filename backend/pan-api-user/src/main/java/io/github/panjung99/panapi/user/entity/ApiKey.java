@@ -13,9 +13,6 @@ public class ApiKey {
     private Long userId;
     private String keyName;
     private String apiKey;
-    private BigDecimal quota;
     private Boolean deleted;
-    private LocalDateTime lastUsed;
-    private LocalDateTime expireTime;
     private LocalDateTime createTime;
 }

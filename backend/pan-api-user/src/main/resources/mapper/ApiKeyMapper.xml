@@ -9,20 +9,15 @@
         <result property="userId" column="user_id"/>
         <result property="keyName" column="key_name"/>
         <result property="apiKey" column="api_key"/>
-        <result property="quota" column="quota"/>
         <result property="deleted" column="is_deleted"/>
-        <result property="lastUsed" column="last_used"/>
-        <result property="expireTime" column="expire_time"/>
         <result property="createTime" column="create_time"/>
     </resultMap>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO us_api_key (
-            user_id, key_name, api_key,
-            quota, expire_time
+            user_id, key_name, api_key
         ) VALUES (
-            #{userId}, #{keyName}, #{apiKey},
-            #{quota}, #{expireTime}
+            #{userId}, #{keyName}, #{apiKey}
         )
     </insert>
 
@@ -30,10 +25,7 @@
         UPDATE us_api_key
         SET
             key_name = #{keyName},
-            quota = #{quota},
-            is_deleted = #{deleted},
-            expire_time = #{expireTime},
-            last_used = #{lastUsed}
+            is_deleted = #{deleted}
         WHERE id = #{id}
     </update>
 
@@ -49,7 +41,7 @@
 
     <select id="selectByApiKey" resultMap="apiKeyResultMap">
         SELECT * FROM us_api_key
-        WHERE api_key = #{apiKey} AND (is_deleted = 0 OR is_deleted IS NULL)
+        WHERE api_key = #{apiKey} AND is_deleted = 0
     </select>
 
     <select id="selectByUserId" resultMap="apiKeyResultMap">
@@ -60,7 +52,7 @@
     <select id="selectActiveKeysByUserId" resultMap="apiKeyResultMap">
         SELECT * FROM us_api_key
         WHERE user_id = #{userId}
-          AND (is_deleted = 0 OR is_deleted IS NULL)
+          AND is_deleted = 0
     </select>
 
 </mapper>

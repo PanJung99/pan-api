@@ -46,7 +46,6 @@ export interface ApiKeyResp {
   id: number;
   keyName: string;
   apiKey: string;
-  quota: number;
   createTime: string;
 }
 
@@ -72,8 +71,6 @@ export interface LoginReq {
 // API Key 相关
 export interface ApiKeyCreateReq {
   keyName: string;
-  quota: number;
-  expireTime: string;
 }
 
 // 充值计划
