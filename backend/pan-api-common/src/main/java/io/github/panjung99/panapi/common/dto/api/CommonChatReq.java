@@ -6,9 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 import java.util.Map;
 
@@ -35,13 +39,18 @@ public class CommonChatReq {
     @NotNull(message = "model must not be null")
     private String model;
 
+    /**
+     * 兼容Deepseek等厂商
+     */
+    private Thinking thinking;
+
 
     /**
      * 可选参数：频率惩罚 (-2.0 到 2.0)
      * 正值惩罚模型重复生成相同的 token
      */
     @JsonProperty("frequency_penalty")
-    private Double frequencyPenalty = 0.0;
+    private Double frequencyPenalty;
 
     /**
      * 可选参数：对数偏差
@@ -72,9 +81,8 @@ public class CommonChatReq {
     private Integer maxTokens;
 
     /**
-     * 可选的元数据键值对（最多16个）
+     * 可选参数: 元数据键值对
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Map<String, String> metadata;
 
     /**
@@ -88,7 +96,7 @@ public class CommonChatReq {
      * 可选参数：并行生成数量
      * 指定每个输入消息生成多少个聊天完成选项
      */
-    private Integer n = 1;
+    private Integer n;
 
     /**
      * 可选：是否启用工具调用的并行执行
@@ -109,14 +117,18 @@ public class CommonChatReq {
      * 正值惩罚模型生成已存在的 token，鼓励新话题
      */
     @JsonProperty("presence_penalty")
-    private Double presencePenalty = 0.0;
+    private Double presencePenalty;
 
-    /**
-     * 可选：用于缓存类似请求的键，以优化缓存命中率
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("prompt_cache_key")
-    private String promptCacheKey;
+//    /**
+//     * 可选：用于缓存类似请求的键，以优化缓存命中率
+//     */ 暂不实现
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonProperty("prompt_cache_key")
+//    private String promptCacheKey;
+
+
+    // TODO prompt_cache_retention
+
 
     /**
      * 可选：推理模型的推理力度
@@ -135,6 +147,16 @@ public class CommonChatReq {
     private ResponseFormat responseFormat;
 
     /**
+     * 可选参数：随机种子
+     * 设置后模型会尽量生成确定性输出
+     * deprecated
+     */
+//    private Integer seed;
+
+    // safety_identifier
+    // 意义不大 暂不实现
+
+    /**
      * 可选：请求处理的服务等级
      * 可选值："auto", "default", "flex", "priority"
      * 默认值为 "auto"
@@ -142,7 +164,6 @@ public class CommonChatReq {
     @JsonProperty("service_tier")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String serviceTier;
-
 
     /**
      * 可选参数：生成停止标记
@@ -178,7 +199,7 @@ public class CommonChatReq {
      * 值越高输出越随机，值越低输出越确定
      * 建议与 top_p 只修改其中一个
      */
-    private Double temperature = 1.0;
+    private Double temperature;
 
     /**
      * 可选参数：工具选择
@@ -210,22 +231,14 @@ public class CommonChatReq {
      * 建议与 temperature 只修改其中一个
      */
     @JsonProperty("top_p")
-    private Double topP = 1.0;
-
+    private Double topP;
 
     /**
      * 可选参数：用户标识符
      * 帮助 OpenAI 监控滥用行为
+     * deprecated
      */
-    private String user;
-
-
-    /**
-     * 可选参数：随机种子
-     * 设置后模型会尽量生成确定性输出
-     */
-    private Integer seed;
-
+    // private String user;
 
     /**
      * 可选：控制模型响应的冗长程度
@@ -236,8 +249,27 @@ public class CommonChatReq {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String verbosity;
 
+    /**
+     * 可选：Web搜索选项
+     */
+    @JsonProperty("web_search_options")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private WebSearchOptions webSearchOptions;
+
 
     // ========== 嵌套类定义 ==========
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class Thinking {
+        /**
+         * 根据厂商不同，取值范围有：enabled， disabled，auto。
+         */
+        private String type;
+    }
 
     @Data
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -334,7 +366,7 @@ public class CommonChatReq {
             private String description;
 
             @JsonProperty("parameters")
-            private Object parameters; // Map<String,Object> 或自定义 JSON Schema
+            private Map<String, Object> parameters;
 
             @JsonProperty("strict")
             private Boolean strict;
@@ -364,13 +396,13 @@ public class CommonChatReq {
     public static class ResponseFormat {
         /**
          * 响应格式类型
-         * 可选值: "text", "json_object"
+         * 可选值: "text", "json_object", "json_schema"
          */
         private String type = "text";
 
         /**
          * 可选参数：JSON Schema
-         * 当 type 为 "json_object" 时，可指定期望的JSON结构
+         * 当 type 为 "json_schema" 时，可指定期望的JSON结构
          */
         private JsonSchema json_schema;
     }
@@ -532,73 +564,58 @@ public class CommonChatReq {
         }
     }
 
+    /**
+     * Web搜索选项
+     */
     @Data
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class SearchConfig {
+    public static class WebSearchOptions {
+        
         /**
-         * 搜索引擎 default:glm/search-std
-         * glm/search-std, glm/search-pro, glm/search-pro-sogou, glm/search-pro-quark, glm/search-pro-jina, glm/search-pro-bing
+         * 用户位置信息
          */
-        private String engine;
+        @JsonProperty("user_location")
+        private UserLocation userLocation;
 
         /**
-         * 定制搜索结果处理的提示语
+         * 搜索上下文大小
          */
-        private String prompt;
+        @JsonProperty("search_context_size")
+        private String searchContextSize;
 
-        /**
-         * 启用搜索意图 default:false
-         */
-        private Boolean intent;
+        @Data
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        public static class UserLocation {
+            /**
+             * 位置类型
+             */
+            private String type = "approximate";
 
-        /**
-         * 搜索结果数量, 取值范围1-50 default:10
-         */
-        private Integer count;
+            /**
+             * 近似位置
+             */
+            private WebSearchLocation approximate;
+        }
 
-        /**
-         * 搜索结果域名过滤白名单
-         */
-        @JsonProperty("domain_filter")
-        private String domainFilter;
+        @Data
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        public static class WebSearchLocation {
+            /**
+             * 纬度
+             */
+            private Double latitude;
 
-        /**
-         * 搜索结果时间过滤 default:noLimit
-         * noLimit, oneDay, oneWeek, oneMonth, oneYear
-         */
-        @JsonProperty("recency_filter")
-        private String recencyFilter;
+            /**
+             * 经度
+             */
+            private Double longitude;
 
-        /**
-         * 搜索结果摘要长度
-         * medium, high
-         */
-        @JsonProperty("content_size")
-        private String contentSize;
-
-        /**
-         * 是否返回搜索结果 default:false
-         */
-        @JsonProperty("return_result")
-        private Boolean returnResult;
-
-        /**
-         * 搜索结果在对话响应中的位置，主要用于流式响应，位于真正回答内容之前还是之后 default:after
-         * before, after
-         */
-        @JsonProperty("result_sequence")
-        private String resultSequence;
-
-        /**
-         * 是否强制要求必须有搜索结果才进行回答
-         */
-        @JsonProperty("require_search")
-        private Boolean requireSearch;
-
-        /**
-         * 是否开启深度搜索（目前未生效） default:false
-         */
-        private Boolean deepable;
+            /**
+             * 精度半径（米）
+             */
+            private Double radius;
+        }
     }
+
 }

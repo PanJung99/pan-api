@@ -8,19 +8,17 @@ import io.github.panjung99.panapi.common.exceptions.AppException;
 import io.github.panjung99.panapi.common.exceptions.ErrorEnum;
 import io.github.panjung99.panapi.vendor.adapter.chat.VendorChatAdapter;
 import io.github.panjung99.panapi.vendor.dto.OpenAIModelListResp;
+import io.github.panjung99.panapi.vendor.dto.chat.DeepSeekChatReq;
 import io.github.panjung99.panapi.vendor.entity.VendorModel;
 import io.github.panjung99.panapi.common.enums.VenTypeEnum;
 import io.github.panjung99.panapi.vendor.service.VendorModelService;
-import io.github.panjung99.panapi.vendor.service.WebClientProvider;
+import io.github.panjung99.panapi.vendor.config.WebClientProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -34,6 +32,8 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
 
     private final ObjectMapper objectMapper;
 
+    private final DeepSeekChatReqMapper deepSeekChatReqMapper;
+
     @Override
     public VenTypeEnum getVendorType() {
         return VenTypeEnum.DEEP_SEEK;
@@ -45,13 +45,16 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
         if (webClient == null) {
             throw new AppException(ErrorEnum.VENDOR_CLIENT_NOT_FOUND);
         }
+        
+        // 使用 MapStruct 将 CommonChatReq 转换为 DeepSeekChatReq
+        DeepSeekChatReq deepSeekRequest = deepSeekChatReqMapper.toDeepSeekChatReq(request);
         // 设置非流式参数
-        request.setStream(false);
+        deepSeekRequest.setStream(false);
 
         return webClient
                 .post()
                 .uri("/v1/chat/completions")
-                .bodyValue(request)
+                .bodyValue(deepSeekRequest)
                 .retrieve()
 //                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
 //                        response -> response.bodyToMono(String.class).flatMap(responseBody -> {
@@ -71,14 +74,17 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
             // TODO此处为空时刷新一下map，但要注意控制并发，同一时刻只能刷新一次
             throw new AppException(ErrorEnum.VENDOR_CLIENT_NOT_FOUND);
         }
+        
+        // 使用 MapStruct 将 CommonChatReq 转换为 DeepSeekChatReq
+        DeepSeekChatReq deepSeekRequest = deepSeekChatReqMapper.toDeepSeekChatReq(request);
         // 设置流式参数
-        request.setStream(true);
+        deepSeekRequest.setStream(true);
 
         return webClient
                 .post()
                 .uri("/v1/chat/completions")
                 .header("Accept", "text/event-stream")
-                .bodyValue(request)
+                .bodyValue(deepSeekRequest)
                 .exchangeToFlux(response -> {
 //                    if (!response.statusCode().is2xxSuccessful()) {
 //                        return response.bodyToMono(String.class)

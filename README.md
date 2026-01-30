@@ -6,10 +6,10 @@
 **开发中，请不要直接在生产环境使用**
 
 TODO
-- 接入chatgpt 火山引擎
+- 雪花算法重新设计
+- 接入火山引擎
 - response也拆成common和deepseek、openai的
 - 准备编写路由算法
-- 雪花算法重新设计
 - CI 中自动生成 & 校验 docs/openapi.json
 - 清除所有Mysql NOW()
 - venderType删除掉或者根据 火山 openai等重构

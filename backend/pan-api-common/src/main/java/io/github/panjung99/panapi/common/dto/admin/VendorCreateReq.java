@@ -14,7 +14,7 @@ public class VendorCreateReq {
     @NotBlank(message = "服务商名称不能为空")
     private String name;
 
-    @Schema(description = "API基础地址", example = "https://api.deepseek.com/", requiredMode = Schema.RequiredMode.REQUIRED)
+    @Schema(description = "API基础地址", example = "https://api.deepseek.com/v1", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotBlank(message = "服务商名称不能为空")
     private String apiBaseUrl;
 
