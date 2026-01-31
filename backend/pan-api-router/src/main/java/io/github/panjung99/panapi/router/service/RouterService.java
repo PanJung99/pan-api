@@ -52,6 +52,8 @@ public class RouterService {
 
     private final List<ModelAdapter> adapters; // Spring 自动注入多个实现
 
+    private final IdUtil idUtil;
+
     private ModelAdapter resolveAdapter() {
         return adapters.stream().filter(a -> a instanceof VendorModelAdapter).findFirst().orElseThrow();
     }
@@ -74,7 +76,7 @@ public class RouterService {
         }
 
         // 雪花算法生成请求id
-        String reqId = IdUtil.nextIdStr();
+        String reqId = idUtil.nextIdStr();
 
         // 验证是否欠费 TODO预扣费
         // 预计算请求费用
@@ -188,7 +190,7 @@ public class RouterService {
         }
 
         // 雪花算法生成请求id
-        String reqId = IdUtil.nextIdStr();
+        String reqId = idUtil.nextIdStr();
 
         // 验证是否欠费 TODO预扣费
         // 预计算请求费用

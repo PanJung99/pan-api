@@ -1,4 +1,4 @@
-package io.github.panjung99.panapi.user.util;
+package io.github.panjung99.panapi.common.util;
 
 import java.util.UUID;
 

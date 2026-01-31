@@ -5,12 +5,11 @@ import io.github.panjung99.panapi.common.dto.be.ApiKeyResp;
 import io.github.panjung99.panapi.user.dao.ApiKeyMapper;
 import io.github.panjung99.panapi.user.entity.ApiKey;
 import io.github.panjung99.panapi.user.entity.User;
-import io.github.panjung99.panapi.user.util.UUIDUtil;
+import io.github.panjung99.panapi.common.util.UUIDUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 

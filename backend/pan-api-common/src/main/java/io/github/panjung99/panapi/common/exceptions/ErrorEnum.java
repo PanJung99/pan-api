@@ -70,6 +70,9 @@ public enum ErrorEnum {
     MODEL_PRICING_ITEM_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, 50003, "Internal server error",
             ApiError.of("internal_error", "internal_server_error", null)),
 
+    SNOW_FLAKE_SLOT_INVALID(HttpStatus.INTERNAL_SERVER_ERROR, 50004, "Internal server error",
+            ApiError.of("internal_error", "internal_server_error", null)),
+
     // ==================== 503 ====================
     VENDOR_TOKEN_NOT_FOUND(HttpStatus.SERVICE_UNAVAILABLE, 50300, "Vendor configuration error",
             ApiError.of("internal_error", "internal_server_error", null)),
