@@ -2,7 +2,9 @@ package io.github.panjung99.panapi.model.dao;
 
 import io.github.panjung99.panapi.model.entity.ModelBinding;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -10,9 +12,9 @@ public interface ModelBindingMapper {
 
     int insert(ModelBinding modelBinding);
 
-    int updateEnabled(Long id, Boolean enabled);
-
-    int deleteById(Long id);
+    int updateEnabled(@Param("id") Long id,
+                      @Param("isActive") Integer isActive,
+                      @Param("updatedAt") LocalDateTime updatedAt);
 
     int deleteByModelId(Long modelId);
 
@@ -20,7 +22,5 @@ public interface ModelBindingMapper {
 
     List<ModelBinding> selectByModelId(Long modelId);
 
-    List<ModelBinding> selectByVenModelId(Long venModelId);
-
-    ModelBinding selectByModelAndVendor(Long modelId, Long venModelId);
+    List<ModelBinding> selectAllByModelId(Long modelId);
 }

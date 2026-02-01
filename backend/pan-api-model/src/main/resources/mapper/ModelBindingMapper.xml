@@ -10,7 +10,7 @@
         <id column="id"                property="id"/>
         <result column="model_id"      property="modelId"/>
         <result column="ven_model_id"  property="venModelId"/>
-        <result column="enabled"       property="enabled"/>
+        <result column="is_active"       property="isActive"/>
         <result column="created_at"    property="createdAt"/>
         <result column="updated_at"    property="updatedAt"/>
     </resultMap>
@@ -19,29 +19,38 @@
         id,
         model_id,
         ven_model_id,
-        enabled,
+        is_active,
         created_at,
         updated_at
     </sql>
 
 
     <!-- 插入 -->
-    <insert id="insert" parameterType="io.github.panjung99.panapi.model.entity.ModelBinding" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO md_model_binding (model_id, ven_model_id, enabled, created_at, updated_at)
-        VALUES (#{modelId}, #{venModelId}, #{enabled}, NOW(), NOW())
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO md_model_binding
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelId != null">model_id,</if>
+            <if test="venModelId != null">ven_model_id,</if>
+            <if test="isActive != null">is_active,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="modelId != null">#{modelId},</if>
+            <if test="venModelId != null">#{venModelId},</if>
+            <if test="isActive != null">#{isActive},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+        </trim>
     </insert>
 
     <!-- 更新启用状态 -->
     <update id="updateEnabled">
         UPDATE md_model_binding
-        SET enabled = #{enabled}, updated_at = NOW()
+        SET is_active = #{isActive}, updated_at = #{updatedAt}
         WHERE id = #{id}
     </update>
-
-    <!-- 删除 -->
-    <delete id="deleteById" parameterType="long">
-        DELETE FROM md_model_binding WHERE id = #{id}
-    </delete>
 
     <!-- 删除模型下全部绑定 -->
     <delete id="deleteByModelId" parameterType="long">
@@ -59,21 +68,14 @@
     <select id="selectByModelId" parameterType="long" resultType="io.github.panjung99.panapi.model.entity.ModelBinding">
         SELECT <include refid="Base_Column_List" />
         FROM md_model_binding
-        WHERE model_id = #{modelId} AND enabled = 1
+        WHERE model_id = #{modelId} AND is_active = 1
     </select>
 
-    <!-- 根据 ven_model_id 查询 -->
-    <select id="selectByVenModelId" parameterType="long" resultType="io.github.panjung99.panapi.model.entity.ModelBinding">
+    <!-- 根据 modelId 查询 -->
+    <select id="selectAllByModelId" parameterType="long" resultType="io.github.panjung99.panapi.model.entity.ModelBinding">
         SELECT <include refid="Base_Column_List" />
         FROM md_model_binding
-        WHERE ven_model_id = #{venModelId} AND enabled = 1
-    </select>
-
-    <!-- 根据 modelId + ven_model_id 查询 -->
-    <select id="selectByModelAndVendor" resultType="io.github.panjung99.panapi.model.entity.ModelBinding">
-        SELECT <include refid="Base_Column_List" />
-        FROM md_model_binding
-        WHERE model_id = #{modelId} AND ven_model_id = #{venModelId}
+        WHERE model_id = #{modelId}
     </select>
 
 </mapper>

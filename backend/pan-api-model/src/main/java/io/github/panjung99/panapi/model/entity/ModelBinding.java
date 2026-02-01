@@ -20,7 +20,7 @@ public class ModelBinding {
     private Long venModelId;
 
     /** 是否启用：0-禁用 1-启用 */
-    private Integer enabled; //TODO 改成is_avtived 与整体保持一致
+    private Integer isActive;
 
     private LocalDateTime createdAt;
 

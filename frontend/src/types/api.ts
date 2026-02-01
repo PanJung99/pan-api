@@ -23,6 +23,7 @@ export type ResponseDtoListVenTypeEnum = ResponseDto<string[]>
 export type ResponseDtoVendorCreate = ResponseDto<string>
 export type ResponseDtoListVendorModelResp = ResponseDto<VendorModelResp[]>
 export type ResponseDtoListModelResp = ResponseDto<ModelResp[]>
+export type ResponseDtoInteger = ResponseDto<number>
 
 // 分页响应
 export interface IPage<T> {

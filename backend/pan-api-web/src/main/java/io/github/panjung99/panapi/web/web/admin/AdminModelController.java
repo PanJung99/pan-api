@@ -6,6 +6,7 @@ import io.github.panjung99.panapi.common.dto.admin.ModelStatusUpdateReq;
 import io.github.panjung99.panapi.common.dto.admin.ModelUpdateReq;
 import io.github.panjung99.panapi.common.dto.admin.VendorCreateReq;
 import io.github.panjung99.panapi.common.dto.be.ModelResp;
+import io.github.panjung99.panapi.model.service.ModelBindingService;
 import io.github.panjung99.panapi.model.service.ModelService;
 import io.github.panjung99.panapi.web.web.be.ModelController;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +24,8 @@ import java.util.List;
 public class AdminModelController {
 
     private final ModelService modelService;
+
+    private final ModelBindingService modelBindingService;
 
     /**
      * Retrieves model details including model mappings.
@@ -62,6 +65,16 @@ public class AdminModelController {
             @PathVariable Long id,
             @RequestBody ModelStatusUpdateReq req) {
         return ResponseDto.getSuccessResponse(modelService.changeModelStatus(id, req.getEnabled()));
+    }
+
+    @Operation(
+            summary = "Toggle Model Binding Status",
+            description = "启用或禁用模型与服务商模型的绑定关系，禁用后，调用模型将不会路由到禁用的服务商模型上。")
+    @PatchMapping("/bindings/{id}/status")
+    public ResponseDto<Boolean> changeBindingStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody ModelStatusUpdateReq req) {
+        return ResponseDto.getSuccessResponse(modelBindingService.changeBindingStatus(id, req.getEnabled()));
     }
 
 }

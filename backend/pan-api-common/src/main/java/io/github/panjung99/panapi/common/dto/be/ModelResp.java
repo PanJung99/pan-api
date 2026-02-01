@@ -40,7 +40,7 @@ public class ModelResp {
     private List<PricingItemResp> pricingItems;
 
     @Data
-    @Schema(description = "模型绑定详情")
+    @Schema(description = "模型绑定详情（用户端不包含该字段）")
     public static class BindingDetail {
 
         @Schema(description = "绑定关系ID", example = "1001")

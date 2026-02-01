@@ -111,6 +111,19 @@ export function AdminModelsPage() {
     }
   }
 
+  const handleToggleBindingStatus = async (bindingId: number, currentEnabled: number) => {
+    const newStatus = currentEnabled === 1 ? false : true
+    try {
+      await adminService.toggleBindingStatus(bindingId, { enabled: newStatus })
+      toast.success(newStatus ? "绑定已启用" : "绑定已禁用")
+      fetchData()
+    } catch (error: any) {
+      console.error("切换绑定状态失败:", error)
+      const errorMessage = error.response?.data?.desc || error.message || "切换绑定状态失败，请稍后重试"
+      toast.error(errorMessage)
+    }
+  }
+
   if (loading) {
     return (
       <AdminLayout>
@@ -240,12 +253,19 @@ export function AdminModelsPage() {
                               <span className="text-muted-foreground">服务商模型:</span>{" "}
                               {getVendorModelName(binding.venModelId)}
                             </div>
-                            <div>
+                            <div className="flex items-center gap-2">
                               {binding.enabled === 1 ? (
                                 <span className="text-green-600">已启用</span>
                               ) : (
                                 <span className="text-gray-400">已禁用</span>
                               )}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleToggleBindingStatus(binding.id, binding.enabled)}
+                              >
+                                {binding.enabled === 1 ? "禁用" : "启用"}
+                              </Button>
                             </div>
                           </div>
                         ))}

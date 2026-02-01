@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -44,10 +45,14 @@ public class ModelService {
 
         if (req.getVendorModelIds() != null) {
             for (Long venModelId : req.getVendorModelIds()) {
+                LocalDateTime now = LocalDateTime.now();
+
                 ModelBinding binding = new ModelBinding();
                 binding.setModelId(modelId);
                 binding.setVenModelId(venModelId);
-                binding.setEnabled(1);
+                binding.setIsActive(1);
+                binding.setCreatedAt(now);
+                binding.setUpdatedAt(now);
                 modelBindingService.addBinding(binding);
             }
         }
@@ -96,7 +101,7 @@ public class ModelService {
                 ModelBinding binding = new ModelBinding();
                 binding.setModelId(id);
                 binding.setVenModelId(venModelId);
-                binding.setEnabled(1);
+                binding.setIsActive(1);
                 modelBindingService.addBinding(binding);
             }
         }
@@ -147,10 +152,9 @@ public class ModelService {
      */
     public List<ModelResp> getApiModelList() {
         List<Model> all = modelMapper.selectApiActive();
-        List<ModelResp> result = all.stream()
+        return all.stream()
                 .map(this::toModelResp)
                 .toList();
-        return result;
     }
 
     /**
@@ -162,7 +166,7 @@ public class ModelService {
         return allModels.stream().map(model -> {
             ModelResp resp = toModelResp(model);
             // 查询该模型的绑定关系
-            List<ModelBinding> bindings = modelBindingService.getByModelId(model.getId());
+            List<ModelBinding> bindings = modelBindingService.getAllByModelId(model.getId());
             resp.setBindings(bindings.stream().map(this::toBindingResp).toList());
 
             // 查询模型定价
@@ -194,7 +198,7 @@ public class ModelService {
         detail.setId(b.getId());
         detail.setVenModelId(b.getVenModelId());
         detail.setModelId(b.getModelId());
-        detail.setEnabled(b.getEnabled());
+        detail.setEnabled(b.getIsActive());
         return detail;
     }
 

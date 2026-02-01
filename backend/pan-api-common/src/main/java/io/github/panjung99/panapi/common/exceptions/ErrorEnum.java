@@ -48,7 +48,9 @@ public enum ErrorEnum {
     // ==================== 404 ====================
     MODEL_NOT_FOUND(HttpStatus.NOT_FOUND, 40400, "The model does not exist",
             ApiError.of("invalid_request_error", "model_not_found", "model")),
-    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, 40401, "resource_not_found",
+    BINDING_NOT_FOUND(HttpStatus.NOT_FOUND, 40401, "The model binding does not exist",
+            ApiError.of("invalid_request_error", "model_binding_not_found", null)),
+    RESOURCE_NOT_FOUND(HttpStatus.NOT_FOUND, 40402, "resource_not_found",
             null),
 
     // ==================== 409 ====================

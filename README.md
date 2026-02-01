@@ -6,12 +6,14 @@
 **开发中，请不要直接在生产环境使用**
 
 TODO
-- 雪花算法重新设计
 - 接入火山引擎
+- 测试用例覆盖
+- 用户管理页面 增加余额功能
 - response也拆成common和deepseek、openai的
 - 准备编写路由算法
 - CI 中自动生成 & 校验 docs/openapi.json
 - 清除所有Mysql NOW()
+- 多 Key 的负载均衡和配额限流
 - venderType删除掉或者根据 火山 openai等重构
 - 前端创建服务商逻辑不够优雅，希望能在VendorCreateDialog中不写像这种
 -  // DeepSeek 表单状态（只实现这一种，其他类型先打样）

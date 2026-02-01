@@ -134,4 +134,10 @@ export const adminService = {
     const response = await apiClient.patch<ResponseDtoBoolean>(`/be-admin/models/${id}/status`, data)
     return response.data
   },
+
+  // 切换模型绑定状态
+  toggleBindingStatus: async (id: number, data: ModelStatusUpdateReq): Promise<ResponseDtoBoolean> => {
+    const response = await apiClient.patch<ResponseDtoBoolean>(`/be-admin/models/bindings/${id}/status`, data)
+    return response.data
+  },
 }
