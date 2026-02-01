@@ -68,13 +68,13 @@
         WHERE id = #{id} AND is_deleted = 0
     </update>
 
-    <update id="deleteByModelId">
+    <update id="softDeleteByModelId">
         UPDATE md_pricing_item
         SET is_deleted = 1, updated_at = NOW()
         WHERE model_id = #{modelId}
     </update>
 
-    <update id="logicalDelete">
+    <update id="softDelete">
         UPDATE md_pricing_item
         SET is_deleted = 1, updated_at = NOW()
         WHERE id = #{id}

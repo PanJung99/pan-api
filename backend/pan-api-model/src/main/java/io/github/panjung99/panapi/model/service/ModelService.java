@@ -5,17 +5,20 @@ import io.github.panjung99.panapi.common.dto.admin.ModelUpdateReq;
 import io.github.panjung99.panapi.common.dto.be.ModelResp;
 import io.github.panjung99.panapi.common.exceptions.AppException;
 import io.github.panjung99.panapi.common.exceptions.ErrorEnum;
+import io.github.panjung99.panapi.common.util.JsonUtil;
 import io.github.panjung99.panapi.model.dao.ModelMapper;
 import io.github.panjung99.panapi.model.entity.Model;
 import io.github.panjung99.panapi.model.entity.ModelBinding;
 import io.github.panjung99.panapi.model.entity.PricingItem;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ModelService {
@@ -85,6 +88,16 @@ public class ModelService {
         if (model == null) {
             throw new AppException(ErrorEnum.MODEL_NOT_FOUND);
         }
+        // 必须至少绑定一个服务商模型
+        if (req.getVendorModelIds() == null || req.getVendorModelIds().isEmpty()) {
+            log.error("Error updating model! At least one VendorModel binding is required. modelId:{} req:{}", id, JsonUtil.toJson(req));
+            throw new AppException(ErrorEnum.INVALID_PARAMETER);
+        }
+        if (Boolean.FALSE.equals(req.getIsFree())
+                && (req.getPricingItems() == null || req.getPricingItems().isEmpty())) {
+            throw new AppException(ErrorEnum.INVALID_PARAMETER);
+        }
+
         // 更新主表基本信息
         model.setName(req.getName());
         model.setDisplayName(req.getDisplayName());
@@ -94,21 +107,19 @@ public class ModelService {
         model.setDescription(req.getDescription());
         modelMapper.update(model);
 
-        // 更新绑定关系 先删除再新增
-        if (req.getVendorModelIds() != null) {
-            modelBindingService.deleteBindingByModelId(id);
-            for (Long venModelId : req.getVendorModelIds()) {
-                ModelBinding binding = new ModelBinding();
-                binding.setModelId(id);
-                binding.setVenModelId(venModelId);
-                binding.setIsActive(1);
-                modelBindingService.addBinding(binding);
-            }
+        // 更新绑定关系
+        modelBindingService.deleteBindingByModelId(id); //先删除再新增
+        for (Long venModelId : req.getVendorModelIds()) {
+            ModelBinding binding = new ModelBinding();
+            binding.setModelId(id);
+            binding.setVenModelId(venModelId);
+            binding.setIsActive(1);
+            modelBindingService.addBinding(binding);
         }
 
-        // 更新计费项 先删除再新增
-        if (req.getPricingItems() != null) {
-            pricingItemService.deleteByModelId(id);
+        // 更新计费项
+        pricingItemService.deleteByModelId(id); //先删除再新增 防止传入null值跳过删除环节
+        if (Boolean.FALSE.equals(req.getIsFree())) {
             for (ModelCreateReq.PricingItemCreateReq item : req.getPricingItems()) {
                 PricingItem pi = new PricingItem();
                 pi.setModelId(id);
@@ -161,7 +172,7 @@ public class ModelService {
      * 获取用于Api展示的模型实体类列表（包括已下架模型）,以及模型绑定关系。
      * @return
      */
-    public List<ModelResp> getToBModelList() {
+    public List<ModelResp> getAdminModelList() {
         List<Model> allModels = modelMapper.selectApiAll();
         return allModels.stream().map(model -> {
             ModelResp resp = toModelResp(model);

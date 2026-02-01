@@ -36,7 +36,7 @@ public class AdminModelController {
             description = "获取模型详细信息，相比用户端接口，多了模型映射关系")
     @GetMapping
     public ResponseDto<List<ModelResp>> list() {
-        return ResponseDto.getSuccessResponse(modelService.getToBModelList());
+        return ResponseDto.getSuccessResponse(modelService.getAdminModelList());
     }
 
     @Operation(

@@ -32,10 +32,10 @@ public interface PricingItemMapper {
     /**
      * 逻辑删除某个模型下的所有计费项
      */
-    int deleteByModelId(@Param("modelId") Long modelId);
+    int softDeleteByModelId(@Param("modelId") Long modelId);
 
     /**
      * 物理删除/逻辑删除单条记录
      */
-    int logicalDelete(@Param("id") Long id);
+    int softDelete(@Param("id") Long id);
 }
