@@ -111,8 +111,8 @@ export function AdminModelsPage() {
     }
   }
 
-  const handleToggleBindingStatus = async (bindingId: number, currentEnabled: number) => {
-    const newStatus = currentEnabled === 1 ? false : true
+  const handleToggleBindingStatus = async (bindingId: number, currentIsActive: number) => {
+    const newStatus = currentIsActive === 1 ? false : true
     try {
       await adminService.toggleBindingStatus(bindingId, { enabled: newStatus })
       toast.success(newStatus ? "绑定已启用" : "绑定已禁用")
@@ -254,7 +254,7 @@ export function AdminModelsPage() {
                               {getVendorModelName(binding.venModelId)}
                             </div>
                             <div className="flex items-center gap-2">
-                              {binding.enabled === 1 ? (
+                              {binding.isActive === 1 ? (
                                 <span className="text-green-600">已启用</span>
                               ) : (
                                 <span className="text-gray-400">已禁用</span>
@@ -262,9 +262,9 @@ export function AdminModelsPage() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => handleToggleBindingStatus(binding.id, binding.enabled)}
+                                onClick={() => handleToggleBindingStatus(binding.id, binding.isActive)}
                               >
-                                {binding.enabled === 1 ? "禁用" : "启用"}
+                                {binding.isActive === 1 ? "禁用" : "启用"}
                               </Button>
                             </div>
                           </div>

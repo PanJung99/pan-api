@@ -198,7 +198,7 @@ public class ModelService {
         detail.setId(b.getId());
         detail.setVenModelId(b.getVenModelId());
         detail.setModelId(b.getModelId());
-        detail.setEnabled(b.getIsActive());
+        detail.setIsActive(b.getIsActive());
         return detail;
     }
 

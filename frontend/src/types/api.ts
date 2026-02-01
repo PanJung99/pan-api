@@ -227,7 +227,7 @@ export interface BindingDetail {
   id: number;
   modelId: number;
   venModelId: number;
-  enabled: number;
+  isActive: number;
 }
 
 export interface PricingItemResp {

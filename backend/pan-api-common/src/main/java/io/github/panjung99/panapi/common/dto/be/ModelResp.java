@@ -53,7 +53,7 @@ public class ModelResp {
         private Long venModelId;
 
         @Schema(description = "绑定是否启用：0-禁用, 1-启用", example = "1")
-        private Integer enabled;
+        private Integer isActive;
     }
 
     @Data

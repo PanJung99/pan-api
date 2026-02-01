@@ -1,10 +1,10 @@
 package io.github.panjung99.panapi.web.web.admin;
 
 import io.github.panjung99.panapi.common.dto.ResponseDto;
+import io.github.panjung99.panapi.common.dto.admin.ModelBindingStatusUpdateReq;
 import io.github.panjung99.panapi.common.dto.admin.ModelCreateReq;
 import io.github.panjung99.panapi.common.dto.admin.ModelStatusUpdateReq;
 import io.github.panjung99.panapi.common.dto.admin.ModelUpdateReq;
-import io.github.panjung99.panapi.common.dto.admin.VendorCreateReq;
 import io.github.panjung99.panapi.common.dto.be.ModelResp;
 import io.github.panjung99.panapi.model.service.ModelBindingService;
 import io.github.panjung99.panapi.model.service.ModelService;
@@ -73,7 +73,7 @@ public class AdminModelController {
     @PatchMapping("/bindings/{id}/status")
     public ResponseDto<Boolean> changeBindingStatus(
             @PathVariable Long id,
-            @Valid @RequestBody ModelStatusUpdateReq req) {
+            @Valid @RequestBody ModelBindingStatusUpdateReq req) {
         return ResponseDto.getSuccessResponse(modelBindingService.changeBindingStatus(id, req.getEnabled()));
     }
 
