@@ -25,16 +25,6 @@ public interface PricingItemMapper {
     int batchInsert(@Param("list") List<PricingItem> list);
 
     /**
-     * 更新计费价格
-     */
-    int updatePrice(PricingItem pricingItem);
-
-    /**
-     * 物理删除单条记录
-     */
-    int deleteById(@Param("id") Long id);
-
-    /**
      * 物理删除某个模型下的所有计费项
      */
     int deleteByModelId(@Param("modelId") Long modelId);

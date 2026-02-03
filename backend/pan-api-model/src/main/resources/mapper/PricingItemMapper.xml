@@ -55,23 +55,6 @@
         </foreach>
     </insert>
 
-    <update id="updatePrice">
-        UPDATE md_pricing_item
-        <set>
-            <if test="priceInput != null">price_input = #{priceInput},</if>
-            <if test="priceOutput != null">price_output = #{priceOutput},</if>
-            <if test="unit != null">unit = #{unit},</if>
-            <if test="isActive != null">is_active = #{isActive},</if>
-            updated_at = NOW()
-        </set>
-        WHERE id = #{id}
-    </update>
-
-    <delete id="deleteById">
-        DELETE FROM md_pricing_item
-        WHERE id = #{id}
-    </delete>
-
     <delete id="deleteByModelId">
         DELETE FROM md_pricing_item
         WHERE model_id = #{modelId}
