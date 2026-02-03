@@ -70,7 +70,6 @@ public class ModelService {
                 pi.setPriceOutput(item.getPriceOutput());
                 pi.setCurrency("CNY");//TODO 后续支持多币种
                 pi.setIsActive(1);
-                pi.setIsDeleted(0);
                 pricingItemService.create(pi);
             }
         }
@@ -128,7 +127,6 @@ public class ModelService {
                 pi.setPriceOutput(item.getPriceOutput());
                 pi.setCurrency("CNY"); //TODO后续支持新币种
                 pi.setIsActive(1);
-                pi.setIsDeleted(0);
                 pricingItemService.create(pi);
             }
         }

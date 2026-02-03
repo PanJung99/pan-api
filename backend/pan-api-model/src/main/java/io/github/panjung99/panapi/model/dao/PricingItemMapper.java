@@ -30,12 +30,12 @@ public interface PricingItemMapper {
     int updatePrice(PricingItem pricingItem);
 
     /**
-     * 逻辑删除某个模型下的所有计费项
+     * 物理删除单条记录
      */
-    int softDeleteByModelId(@Param("modelId") Long modelId);
+    int deleteById(@Param("id") Long id);
 
     /**
-     * 物理删除/逻辑删除单条记录
+     * 物理删除某个模型下的所有计费项
      */
-    int softDelete(@Param("id") Long id);
+    int deleteByModelId(@Param("modelId") Long modelId);
 }

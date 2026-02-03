@@ -11,20 +11,19 @@
         <result column="price_output" property="priceOutput" />
         <result column="currency" property="currency" />
         <result column="is_active" property="isActive" />
-        <result column="is_deleted" property="isDeleted" />
         <result column="created_at" property="createdAt" />
         <result column="updated_at" property="updatedAt" />
     </resultMap>
 
     <sql id="Base_Column_List">
         id, model_id, unit, price_input, price_output,
-        currency, is_active, is_deleted, created_at, updated_at
+        currency, is_active, created_at, updated_at
     </sql>
 
     <select id="selectByModelId" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List" />
         FROM md_pricing_item
-        WHERE model_id = #{modelId} AND is_deleted = 0 AND is_active = 1
+        WHERE model_id = #{modelId} AND is_active = 1
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -65,19 +64,17 @@
             <if test="isActive != null">is_active = #{isActive},</if>
             updated_at = NOW()
         </set>
-        WHERE id = #{id} AND is_deleted = 0
-    </update>
-
-    <update id="softDeleteByModelId">
-        UPDATE md_pricing_item
-        SET is_deleted = 1, updated_at = NOW()
-        WHERE model_id = #{modelId}
-    </update>
-
-    <update id="softDelete">
-        UPDATE md_pricing_item
-        SET is_deleted = 1, updated_at = NOW()
         WHERE id = #{id}
     </update>
+
+    <delete id="deleteById">
+        DELETE FROM md_pricing_item
+        WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByModelId">
+        DELETE FROM md_pricing_item
+        WHERE model_id = #{modelId}
+    </delete>
 
 </mapper>

@@ -41,7 +41,6 @@ CREATE TABLE `md_pricing_item` (
 
   `currency` VARCHAR(16) NOT NULL DEFAULT 'CNY',
   `is_active` tinyint(1) DEFAULT '1' COMMENT '是否激活：0-禁用 1-启用',
-  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常 1-已删除',
 
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

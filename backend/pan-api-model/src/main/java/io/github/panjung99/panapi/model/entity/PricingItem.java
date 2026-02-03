@@ -39,7 +39,6 @@ public class PricingItem {
      * 是否激活：0-禁用 1-启用
      */
     private Integer isActive;
-    private Integer isDeleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

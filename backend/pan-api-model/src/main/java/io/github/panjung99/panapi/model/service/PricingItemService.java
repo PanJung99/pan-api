@@ -21,12 +21,12 @@ public class PricingItemService {
     }
 
     public boolean deleteById(Long id) {
-        int count = pricingItemMapper.softDelete(id);
+        int count = pricingItemMapper.deleteById(id);
         return count > 0;
     }
 
     public boolean deleteByModelId(Long modelId) {
-        int count = pricingItemMapper.softDeleteByModelId(modelId);
+        int count = pricingItemMapper.deleteByModelId(modelId);
         return count > 0;
     }
 
