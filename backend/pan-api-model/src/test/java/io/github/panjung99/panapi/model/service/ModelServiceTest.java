@@ -12,12 +12,15 @@ import io.github.panjung99.panapi.model.dao.ModelMapper;
 import io.github.panjung99.panapi.model.entity.Model;
 import io.github.panjung99.panapi.model.entity.ModelBinding;
 import io.github.panjung99.panapi.model.entity.PricingItem;
+import io.github.panjung99.panapi.model.mapper.ModelDtoMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -42,6 +45,9 @@ class ModelServiceTest {
 
     @Mock
     private PricingItemService pricingItemService;
+
+    @Spy
+    private ModelDtoMapper modelDtoMapper = Mappers.getMapper(ModelDtoMapper.class);
 
     @InjectMocks
     private ModelService modelService;
