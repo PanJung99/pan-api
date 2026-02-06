@@ -4,17 +4,20 @@ import lombok.Getter;
 
 @Getter
 public enum VenTypeEnum {
-    COMMON("通用类型"),
-    OPEN_AI("OpenAI"),
-    DEEP_SEEK("深度求索"),
-    GLM("智谱清言"),
-    DOU_BAO("字节跳动豆包(火山引擎)"),
-    XUN_FEI("讯飞星火")
+    COMMON("通用类型", null),
+    OPEN_AI("OpenAI", null),
+    DEEP_SEEK("深度求索", "https://api.deepseek.com/v1"),
+    GLM("智谱清言", null),
+    DOU_BAO("豆包(火山引擎)", "https://ark.cn-beijing.volces.com/api/v3"),
+    XUN_FEI("讯飞星火", null),
+    GEMINI("Google Gemini", null)
     ;
 
-    private final String description;
+    private final String name;
+    private final String apiBaseUrl;
 
-    VenTypeEnum(String description) {
-        this.description = description;
+    VenTypeEnum(String name, String apiBaseUrl) {
+        this.name = name;
+        this.apiBaseUrl = apiBaseUrl;
     }
 }

@@ -1,16 +1,16 @@
-package io.github.panjung99.panapi.vendor.adapter.chat.deepseek;
+package io.github.panjung99.panapi.vendor.adapter.chat.doubao;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.panjung99.panapi.common.dto.api.CommonChatReq;
 import io.github.panjung99.panapi.common.dto.api.CommonChatResp;
 import io.github.panjung99.panapi.common.dto.api.CommonChunk;
+import io.github.panjung99.panapi.common.enums.VenTypeEnum;
 import io.github.panjung99.panapi.common.exceptions.AppException;
 import io.github.panjung99.panapi.common.exceptions.ErrorEnum;
 import io.github.panjung99.panapi.vendor.adapter.chat.VendorChatAdapter;
 import io.github.panjung99.panapi.vendor.dto.OpenAIModelListResp;
-import io.github.panjung99.panapi.vendor.dto.chat.DeepSeekChatReq;
+import io.github.panjung99.panapi.vendor.dto.chat.DouBaoChatReq;
 import io.github.panjung99.panapi.vendor.entity.VendorModel;
-import io.github.panjung99.panapi.common.enums.VenTypeEnum;
 import io.github.panjung99.panapi.vendor.service.VendorModelService;
 import io.github.panjung99.panapi.vendor.config.WebClientProvider;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DeepSeekChatAdapter implements VendorChatAdapter {
+public class DouBaoChatAdapter implements VendorChatAdapter {
 
     private final VendorModelService vendorModelService;
 
@@ -32,11 +32,11 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
 
     private final ObjectMapper objectMapper;
 
-    private final DeepSeekChatReqMapper deepSeekChatReqMapper;
+    private final DouBaoChatReqMapper douBaoChatReqMapper;
 
     @Override
     public VenTypeEnum getVendorType() {
-        return VenTypeEnum.DEEP_SEEK;
+        return VenTypeEnum.DOU_BAO;
     }
 
     @Override
@@ -45,24 +45,17 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
         if (webClient == null) {
             throw new AppException(ErrorEnum.VENDOR_CLIENT_NOT_FOUND);
         }
-        
-        // 使用 MapStruct 将 CommonChatReq 转换为 DeepSeekChatReq
-        DeepSeekChatReq deepSeekRequest = deepSeekChatReqMapper.toDeepSeekChatReq(request);
+
+        // 使用 MapStruct 将 CommonChatReq 转换为 DouBaoChatReq
+        DouBaoChatReq douBaoChatReq = douBaoChatReqMapper.toDouBaoChatReq(request);
         // 设置非流式参数
-        deepSeekRequest.setStream(false);
+        douBaoChatReq.setStream(false);
 
         return webClient
                 .post()
                 .uri("/chat/completions")
-                .bodyValue(deepSeekRequest)
+                .bodyValue(douBaoChatReq)
                 .retrieve()
-//                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
-//                        response -> response.bodyToMono(String.class).flatMap(responseBody -> {
-//                            AppException e = getVendorType()
-//                                    .getErrorParser()
-//                                    .callParse(response.statusCode(), responseBody);
-//                            return Mono.error(e);
-//                        })) TODO后期再搞
                 .bodyToMono(CommonChatResp.class)
                 .block();
     }
@@ -73,27 +66,18 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
         if (webClient == null) {
             throw new AppException(ErrorEnum.VENDOR_CLIENT_NOT_FOUND);
         }
-        
-        // 使用 MapStruct 将 CommonChatReq 转换为 DeepSeekChatReq
-        DeepSeekChatReq deepSeekRequest = deepSeekChatReqMapper.toDeepSeekChatReq(request);
+
+        // 使用 MapStruct 将 CommonChatReq 转换为 DouBaoChatReq
+        DouBaoChatReq douBaoChatReq = douBaoChatReqMapper.toDouBaoChatReq(request);
         // 设置流式参数
-        deepSeekRequest.setStream(true);
+        douBaoChatReq.setStream(true);
 
         return webClient
                 .post()
                 .uri("/chat/completions")
                 .header("Accept", "text/event-stream")
-                .bodyValue(deepSeekRequest)
+                .bodyValue(douBaoChatReq)
                 .exchangeToFlux(response -> {
-//                    if (!response.statusCode().is2xxSuccessful()) {
-//                        return response.bodyToMono(String.class)
-//                                .flatMapMany(responseBody -> {
-//                                    AppException e = getVendorType()
-//                                            .getErrorParser()
-//                                            .callParse(response.statusCode(), responseBody);
-//                                    return Flux.error(e);
-//                                });
-//                    } TODO
                     // 状态码正常，处理流式响应
                     return response.bodyToFlux(String.class)
                             .filter(data -> !data.isEmpty() && !"[DONE]".equals(data))
@@ -128,15 +112,14 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
             return;
         }
         List<VendorModel> vendorModels = modelListResp.getData().stream()
-                        .map(t -> {
-                            VendorModel model = new VendorModel();
-                            model.setVendorId(vendorId);
-                            model.setName(t.getId());
-                            return model;
-                        })
-                        .toList();
+                .map(t -> {
+                    VendorModel model = new VendorModel();
+                    model.setVendorId(vendorId);
+                    model.setName(t.getId());
+                    return model;
+                })
+                .toList();
 
         vendorModelService.updateVendorModels(vendorId, vendorModels);
     }
-
 }

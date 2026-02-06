@@ -2,9 +2,8 @@ import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { adminService } from "@/services/admin"
 import type { VendorCreateReq } from "@/types/api"
-import { VenType, parseVenType } from "@/types/vendor"
 import { useVendorTypes } from "@/hooks/useVendorTypes"
-import { DeepSeekVendorForm, createDeepSeekVendorPayload, type DeepSeekVendorFormValue } from "./DeepSeekVendorForm"
+import { getVendorFormConfig, type VendorFormData } from "./vendorFormConfigs"
 
 type Props = {
   open: boolean
@@ -15,42 +14,41 @@ type Props = {
 export function VendorCreateDialog({ open, onOpenChange, onCreated }: Props) {
   const { typeOptions, loading: loadingTypes, loadTypes } = useVendorTypes()
   const [submitting, setSubmitting] = useState(false)
-  const [selectedBackendType, setSelectedBackendType] = useState<string | "">("")
+  const [selectedType, setSelectedType] = useState<string | "">("")
+  const [formData, setFormData] = useState<VendorFormData | null>(null)
 
-  // DeepSeek 表单状态（只实现这一种，其他类型先打样）
-  const [deepSeekForm, setDeepSeekForm] = useState<DeepSeekVendorFormValue>({
-    name: "",
-    apiBaseUrl: "",
-  })
-
-  const currentVenType: VenType | undefined = parseVenType(selectedBackendType)
+  const formConfig = selectedType ? getVendorFormConfig(selectedType) : undefined
 
   // 打开弹窗时加载类型列表
   useEffect(() => {
     if (open) {
       void loadTypes()
-      // 设置默认选中项
-      if (typeOptions.length > 0 && !selectedBackendType) {
-        const preferred =
-          typeOptions.find((t) => t.code === VenType.DEEP_SEEK)?.code ?? typeOptions[0]?.code ?? ""
-        setSelectedBackendType(preferred)
+      if (typeOptions.length > 0 && !selectedType) {
+        setSelectedType(typeOptions[0]?.code || "")
       }
     } else {
-      // 关闭时重置表单
-      setDeepSeekForm({ name: "", apiBaseUrl: "" })
-      setSelectedBackendType("")
+      setFormData(null)
+      setSelectedType("")
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open])
 
   // 当类型列表加载完成后，设置默认选中项
   useEffect(() => {
-    if (open && typeOptions.length > 0 && !selectedBackendType) {
-      const preferred =
-        typeOptions.find((t) => t.code === VenType.DEEP_SEEK)?.code ?? typeOptions[0]?.code ?? ""
-      setSelectedBackendType(preferred)
+    if (open && typeOptions.length > 0 && !selectedType) {
+      setSelectedType(typeOptions[0]?.code || "")
     }
-  }, [open, typeOptions, selectedBackendType])
+  }, [open, typeOptions, selectedType])
+
+  // 当选择类型时，初始化表单数据
+  useEffect(() => {
+    if (selectedType && formConfig) {
+      const typeOption = typeOptions.find((t) => t.code === selectedType)
+      const apiBaseUrl = typeOption?.apiBaseUrl
+      setFormData(formConfig.getInitialValue(apiBaseUrl))
+    } else {
+      setFormData(null)
+    }
+  }, [selectedType, formConfig, typeOptions])
 
   const handleClose = () => {
     if (submitting) return
@@ -58,23 +56,12 @@ export function VendorCreateDialog({ open, onOpenChange, onCreated }: Props) {
   }
 
   const buildPayload = (): VendorCreateReq | null => {
-    if (!selectedBackendType) {
+    if (!selectedType || !formConfig || !formData) {
       alert("请选择服务商类型")
       return null
     }
 
-    const venType = parseVenType(selectedBackendType)
-    if (venType === VenType.DEEP_SEEK) {
-      if (!deepSeekForm.name.trim() || !deepSeekForm.apiBaseUrl.trim()) {
-        alert("请填写完整的 DeepSeek 服务商信息")
-        return null
-      }
-      return createDeepSeekVendorPayload(deepSeekForm)
-    }
-
-    // 其他类型暂未实现，先给出提示
-    alert("该类型的创建表单暂未实现，请选择 DeepSeek 测试流程")
-    return null
+    return formConfig.createPayload(formData)
   }
 
   const handleSubmit = async () => {
@@ -97,27 +84,26 @@ export function VendorCreateDialog({ open, onOpenChange, onCreated }: Props) {
   }
 
   const renderForm = () => {
-    if (!selectedBackendType) {
+    if (!selectedType) {
       return <p className="text-sm text-muted-foreground">请先选择服务商类型。</p>
     }
 
-    const venType = currentVenType
-    if (venType === VenType.DEEP_SEEK) {
+    if (!formConfig) {
       return (
-        <DeepSeekVendorForm
-          value={deepSeekForm}
-          onChange={setDeepSeekForm}
-          disabled={submitting}
-        />
+        <div className="p-4 border rounded bg-muted/50">
+          <p className="text-sm text-muted-foreground">
+            该服务商类型的创建表单暂未实现，请选择其他类型。
+          </p>
+        </div>
       )
     }
 
-    // 其他类型打样：先只展示占位说明
-    return (
-      <p className="text-sm text-muted-foreground">
-        类型 {selectedBackendType} 的自定义表单暂未实现。当前仅支持 DeepSeek 作为示例。
-      </p>
-    )
+    if (!formData) {
+      return <p className="text-sm text-muted-foreground">加载表单中...</p>
+    }
+
+    const FormComponent = formConfig.FormComponent
+    return <FormComponent value={formData} onChange={setFormData} disabled={submitting} />
   }
 
   if (!open) return null
@@ -142,20 +128,18 @@ export function VendorCreateDialog({ open, onOpenChange, onCreated }: Props) {
               <select
                 id="vendor-type"
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                value={selectedBackendType}
+                value={selectedType}
                 disabled={loadingTypes || submitting}
-                onChange={(e) => setSelectedBackendType(e.target.value)}
+                onChange={(e) => setSelectedType(e.target.value)}
               >
                 <option value="" disabled>
                   {loadingTypes ? "类型加载中..." : "请选择服务商类型"}
                 </option>
-                {typeOptions.map(({ code, label }) => {
-                  return (
-                    <option key={code} value={code}>
-                      {label}
-                    </option>
-                  )
-                })}
+                {typeOptions.map(({ code, label }) => (
+                  <option key={code} value={code}>
+                    {label}
+                  </option>
+                ))}
               </select>
             </div>
 
@@ -166,7 +150,7 @@ export function VendorCreateDialog({ open, onOpenChange, onCreated }: Props) {
             <Button variant="outline" onClick={handleClose} disabled={submitting}>
               取消
             </Button>
-            <Button onClick={handleSubmit} disabled={submitting || loadingTypes}>
+            <Button onClick={handleSubmit} disabled={submitting || loadingTypes || !formConfig}>
               {submitting ? "创建中..." : "创建"}
             </Button>
           </div>

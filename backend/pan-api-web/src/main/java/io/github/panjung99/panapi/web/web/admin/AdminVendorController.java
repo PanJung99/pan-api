@@ -131,8 +131,9 @@ public class AdminVendorController {
                                                 "desc": "Success",
                                                 "result": [
                                                     {
-                                                        "type": "OPEN_AI",
-                                                        "description": "OpenAI"
+                                                        "type": "DEEP_SEEK",
+                                                        "name": "深度求索",
+                                                        "apiBaseUrl": "https://api.deepseek.com/v1"
                                                     }
                                                 ]
                                             }
@@ -147,7 +148,8 @@ public class AdminVendorController {
                 .map(en -> {
                     Map<String, String> map = new HashMap<>();
                     map.put("type", en.name());
-                    map.put("description", en.getDescription());
+                    map.put("name", en.getName());
+                    map.put("apiBaseUrl", en.getApiBaseUrl());
                     return map;
                 }).toList();
         return ResponseDto.getSuccessResponse(types);
