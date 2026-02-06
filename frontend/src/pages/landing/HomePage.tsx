@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { MainLayout } from "@/components/layout/MainLayout"
 import { ModelCard } from "@/components/common/ModelCard"
+import { CodeTabs } from "@/components/common/CodeTabs"
 import { modelService } from "@/services/model"
 import type { DisplayModelVO } from "@/types/api"
 
@@ -33,7 +34,53 @@ export function HomePage() {
         </div>
 
         <div className="mb-12">
-          <h2 className="text-2xl font-semibold mb-6">支持的模型</h2>
+          <h2 className="text-2xl font-semibold mb-6">API 调用示例</h2>
+          <CodeTabs
+            examples={[
+              {
+                language: "cURL",
+                title: "cURL 示例",
+                code: `curl --location '{{baseUrl}}/api/v1/chat/completions' \\
+--header 'Authorization: Bearer your-api-key' \\
+--data '{
+    "model": "deepseek",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Hello World!"
+      }
+    ]
+}'`
+              },
+              {
+                language: "Python",
+                title: "Python 示例",
+                code: `import requests
+
+url = "{{baseUrl}}/api/v1/chat/completions"
+headers = {
+    "Authorization": "Bearer your-api-key",
+    "Content-Type": "application/json"
+}
+data = {
+    "model": "deepseek",
+    "messages": [
+        {
+            "role": "user",
+            "content": "Hello World!"
+        }
+    ]
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())`
+              }
+            ]}
+          />
+        </div>
+
+        <div className="mb-12">
+          <h2 className="text-2xl font-semibold mb-6">模型列表</h2>
           {loading ? (
             <div className="text-center py-12">加载中...</div>
           ) : (
