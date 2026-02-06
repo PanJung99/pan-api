@@ -22,6 +22,7 @@ import type {
   ModelStatusUpdateReq,
   AdminUserReq,
   ResponseDtoIPageAdminUserResp,
+  AdminBalanceAdjustReq,
 } from "@/types/api"
 
 export const adminService = {
@@ -148,6 +149,15 @@ export const adminService = {
     const response = await apiClient.get<ResponseDtoIPageAdminUserResp>("/be-admin/users", {
       params: data,
     })
+    return response.data
+  },
+
+  // 调整用户余额
+  adjustBalance: async (userId: number, data: AdminBalanceAdjustReq): Promise<ResponseDtoVoid> => {
+    const response = await apiClient.patch<ResponseDtoVoid>(
+      `/be-admin/users/${userId}/balance`,
+      data
+    )
     return response.data
   },
 }

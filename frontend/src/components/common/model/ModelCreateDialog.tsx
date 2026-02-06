@@ -329,8 +329,8 @@ export function ModelCreateDialog({ open, onOpenChange, onCreated }: Props) {
                             }
                             disabled={submitting}
                           >
-                            <option value="mtokens">千tokens</option>
-                            <option value="mchars">千字符</option>
+                            <option value="mtokens">百万tokens</option>
+                            <option value="mchars">百万字符</option>
                             <option value="times">次</option>
                             <option value="nums">个</option>
                             <option value="minutes">分钟</option>

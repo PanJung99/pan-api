@@ -304,3 +304,10 @@ export interface AdminUserResp {
   balance: number;
   createTime: string;
 }
+
+// 余额调整相关（管理员端）
+export interface AdminBalanceAdjustReq {
+  userId: number;
+  amount: number;
+  reason: string;
+}

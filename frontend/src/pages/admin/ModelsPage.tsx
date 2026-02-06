@@ -62,8 +62,8 @@ export function AdminModelsPage() {
 
   const getUnitLabel = (unit: string) => {
     const map: Record<string, string> = {
-      mtokens: "千tokens",
-      mchars: "千字符",
+      mtokens: "百万tokens",
+      mchars: "百万字符",
       times: "次",
       nums: "个",
       minutes: "分钟",
