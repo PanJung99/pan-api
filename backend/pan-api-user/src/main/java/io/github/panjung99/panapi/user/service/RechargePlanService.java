@@ -2,16 +2,16 @@ package io.github.panjung99.panapi.user.service;
 
 import io.github.panjung99.panapi.user.dao.RechargePlanMapper;
 import io.github.panjung99.panapi.user.entity.RechargePlan;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RechargePlanService {
 
-    @Autowired
-    private RechargePlanMapper rechargePlanMapper;
+    private final RechargePlanMapper rechargePlanMapper;
 
     public RechargePlan getById(Long id) {
         return rechargePlanMapper.findById(id);

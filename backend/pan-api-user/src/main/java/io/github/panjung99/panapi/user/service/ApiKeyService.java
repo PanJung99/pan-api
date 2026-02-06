@@ -6,7 +6,7 @@ import io.github.panjung99.panapi.user.dao.ApiKeyMapper;
 import io.github.panjung99.panapi.user.entity.ApiKey;
 import io.github.panjung99.panapi.user.entity.User;
 import io.github.panjung99.panapi.common.util.UUIDUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,18 +14,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ApiKeyService {
 
-    @Autowired
-    private ApiKeyMapper apiKeyMapper;
-
-    public ApiKey getById(Long id) {
-        return apiKeyMapper.selectById(id);
-    }
-
-    public List<ApiKey> getByUserId(Long userId) {
-        return apiKeyMapper.selectByUserId(userId);
-    }
+    private final ApiKeyMapper apiKeyMapper;
 
     public ApiKey getByApiKey(String apiKey) {
         return apiKeyMapper.selectByApiKey(apiKey);

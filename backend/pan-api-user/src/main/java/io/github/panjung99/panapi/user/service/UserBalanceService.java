@@ -5,8 +5,8 @@ import io.github.panjung99.panapi.common.exceptions.ErrorEnum;
 import io.github.panjung99.panapi.user.dao.BalanceMapper;
 import io.github.panjung99.panapi.user.dao.UserMapper;
 import io.github.panjung99.panapi.user.entity.Balance;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +14,12 @@ import java.math.BigDecimal;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserBalanceService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
-    private BalanceMapper balanceMapper;
+    private final BalanceMapper balanceMapper;
 
     /**
      * 通过userId获取用户余额

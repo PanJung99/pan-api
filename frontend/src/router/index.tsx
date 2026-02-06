@@ -15,6 +15,7 @@ import { AdminModelsPage } from "@/pages/admin/ModelsPage"
 import { AdminVendorsPage } from "@/pages/admin/VendorsPage"
 import { VendorTokensPage } from "@/pages/admin/VendorTokensPage"
 import { VendorModelsPage } from "@/pages/admin/VendorModelsPage"
+import { AdminUsersPage } from "@/pages/admin/UsersPage"
 
 // 路由守卫组件
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -145,6 +146,14 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <AdminVendorsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/users",
+    element: (
+      <ProtectedRoute>
+        <AdminUsersPage />
       </ProtectedRoute>
     ),
   },

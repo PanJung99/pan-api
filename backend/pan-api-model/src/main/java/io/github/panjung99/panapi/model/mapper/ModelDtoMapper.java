@@ -20,8 +20,6 @@ public interface ModelDtoMapper {
 
     ModelResp.PricingItemResp toPricingItemResp(PricingItem item);
 
-    List<ModelResp> toModelRespList(List<Model> models);
-
     List<ModelResp.BindingDetail> toBindingRespList(List<ModelBinding> bindings);
 
     List<ModelResp.PricingItemResp> toPricingItemRespList(List<PricingItem> items);

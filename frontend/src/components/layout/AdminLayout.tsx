@@ -9,6 +9,7 @@ interface AdminLayoutProps {
 
 const navItems = [
   { path: "/admin/dashboard", label: "仪表盘" },
+  { path: "/admin/users", label: "用户管理" },
   { path: "/admin/orders", label: "订单管理" },
   { path: "/admin/models", label: "模型管理" },
   { path: "/admin/vendors", label: "服务商管理" },

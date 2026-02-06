@@ -24,6 +24,7 @@ export type ResponseDtoVendorCreate = ResponseDto<string>
 export type ResponseDtoListVendorModelResp = ResponseDto<VendorModelResp[]>
 export type ResponseDtoListModelResp = ResponseDto<ModelResp[]>
 export type ResponseDtoInteger = ResponseDto<number>
+export type ResponseDtoIPageAdminUserResp = ResponseDto<IPage<AdminUserResp>>
 
 // 分页响应
 export interface IPage<T> {
@@ -286,4 +287,20 @@ export interface ModelUpdateReq {
 // 更新模型状态请求
 export interface ModelStatusUpdateReq {
   enabled: boolean;
+}
+
+// 用户管理相关（管理员端）
+export interface AdminUserReq {
+  pageNum?: number;
+  pageSize?: number;
+}
+
+export interface AdminUserResp {
+  id: number;
+  loginType?: number;
+  username: string;
+  phone?: string;
+  email: string;
+  balance: number;
+  createTime: string;
 }

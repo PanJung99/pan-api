@@ -71,4 +71,29 @@
         WHERE id = #{id}
     </update>
 
+    <resultMap id="adminUserRespResultMap" type="io.github.panjung99.panapi.common.dto.admin.AdminUserResp">
+        <id property="id" column="id"/>
+        <result property="loginType" column="login_type"/>
+        <result property="username" column="username"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="balance" column="current_balance"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+
+    <select id="findUserPage" resultMap="adminUserRespResultMap">
+        SELECT
+            u.id,
+            u.login_type,
+            u.username,
+            u.phone,
+            u.email,
+            COALESCE(b.current_balance, 0) AS current_balance,
+            u.create_time
+        FROM us_user u
+        LEFT JOIN us_balance b ON u.id = b.user_id
+        WHERE u.is_deleted = 0
+        ORDER BY u.create_time DESC
+    </select>
+
 </mapper>

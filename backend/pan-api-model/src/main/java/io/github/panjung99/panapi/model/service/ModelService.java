@@ -147,7 +147,13 @@ public class ModelService {
      */
     public List<ModelResp> getApiModelList() {
         List<Model> all = modelMapper.selectApiActive();
-        return modelDtoMapper.toModelRespList(all);
+        return all.stream().map(model -> {
+            ModelResp resp = modelDtoMapper.toModelResp(model);
+
+            List<PricingItem> pricingItems = pricingItemService.getByModelId(model.getId());
+            resp.setPricingItems(modelDtoMapper.toPricingItemRespList(pricingItems));
+            return resp;
+        }).toList();
     }
 
     /**

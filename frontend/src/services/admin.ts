@@ -20,6 +20,8 @@ import type {
   ModelCreateReq,
   ModelUpdateReq,
   ModelStatusUpdateReq,
+  AdminUserReq,
+  ResponseDtoIPageAdminUserResp,
 } from "@/types/api"
 
 export const adminService = {
@@ -138,6 +140,14 @@ export const adminService = {
   // 切换模型绑定状态
   toggleBindingStatus: async (id: number, data: ModelStatusUpdateReq): Promise<ResponseDtoBoolean> => {
     const response = await apiClient.patch<ResponseDtoBoolean>(`/be-admin/models/bindings/${id}/status`, data)
+    return response.data
+  },
+
+  // 获取用户列表
+  getUsers: async (data: AdminUserReq): Promise<ResponseDtoIPageAdminUserResp> => {
+    const response = await apiClient.get<ResponseDtoIPageAdminUserResp>("/be-admin/users", {
+      params: data,
+    })
     return response.data
   },
 }

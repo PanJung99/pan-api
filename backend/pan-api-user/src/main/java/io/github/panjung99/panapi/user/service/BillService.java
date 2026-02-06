@@ -9,17 +9,17 @@ import io.github.panjung99.panapi.common.util.DateUtil;
 import io.github.panjung99.panapi.user.dao.BillMapper;
 import io.github.panjung99.panapi.user.entity.Bill;
 import io.github.panjung99.panapi.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class BillService {
 
-    @Autowired
-    private BillMapper billMapper;
+    private final BillMapper billMapper;
 
     public void createBill(Bill.BillType type, BigDecimal amount, Long apiKeyId, Long userId, String relatedId, String desc) {
         createBill(type, amount, apiKeyId, userId, relatedId, desc, null, null);

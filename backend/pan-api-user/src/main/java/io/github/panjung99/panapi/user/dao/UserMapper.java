@@ -1,5 +1,8 @@
 package io.github.panjung99.panapi.user.dao;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.github.panjung99.panapi.common.dto.admin.AdminUserResp;
 import io.github.panjung99.panapi.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -32,4 +35,6 @@ public interface UserMapper {
 
     int updatePassword(@Param("id") Long id,
                        @Param("password") String newPassword);
+
+    IPage<AdminUserResp> findUserPage(Page<User> page);
 }

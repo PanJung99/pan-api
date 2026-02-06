@@ -8,7 +8,7 @@ import io.github.panjung99.panapi.user.dao.BalanceMapper;
 import io.github.panjung99.panapi.user.dao.UserMapper;
 import io.github.panjung99.panapi.user.entity.Balance;
 import io.github.panjung99.panapi.user.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
-    @Autowired
-    private BalanceMapper balanceMapper;
+    private final BalanceMapper balanceMapper;
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
