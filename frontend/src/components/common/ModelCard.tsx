@@ -15,9 +15,11 @@ export function ModelCard({ model }: ModelCardProps) {
     toast.success("复制成功")
   }
 
+  const pricingItem = model.pricingItems?.[0]
+
   return (
-    <Card>
-      <CardHeader className="relative">
+    <Card className="h-full flex flex-col">
+      <CardHeader className="relative flex-shrink-0">
         <div className="absolute top-6 right-6">
           <Badge variant="secondary">{getModelCategoryLabel(model.category)}</Badge>
         </div>
@@ -46,30 +48,49 @@ export function ModelCard({ model }: ModelCardProps) {
           </button>
         </CardDescription>
         {model.description && (
-          <p className="text-sm text-muted-foreground">{model.description}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2">{model.description}</p>
         )}
       </CardHeader>
-      <CardContent className="space-y-2">
-        {model.publicInputPrice > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">输入价格:</span>
-            <span>¥{model.publicInputPrice}/{model.unit}</span>
-          </div>
-        )}
-        {model.publicOutputPrice > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">输出价格:</span>
-            <span>¥{model.publicOutputPrice}/{model.unit}</span>
-          </div>
-        )}
-        {model.publicUnifiedPrice > 0 && (
-          <div className="flex justify-between text-sm">
-            <span className="text-muted-foreground">统一价格:</span>
-            <span>¥{model.publicUnifiedPrice}/{model.unit}</span>
-          </div>
-        )}
-        {model.isFree && (
+      <CardContent className="space-y-2 flex-grow flex flex-col justify-end">
+        {model.isFree ? (
           <div className="text-sm text-green-600 font-medium">免费模型</div>
+        ) : (
+          <>
+            {pricingItem && (
+              <>
+                {pricingItem.priceInput > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">输入价格:</span>
+                    <span>¥{pricingItem.priceInput}/{pricingItem.unit}</span>
+                  </div>
+                )}
+                {pricingItem.priceOutput > 0 && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">输出价格:</span>
+                    <span>¥{pricingItem.priceOutput}/{pricingItem.unit}</span>
+                  </div>
+                )}
+              </>
+            )}
+            {!pricingItem && model.publicInputPrice > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">输入价格:</span>
+                <span>¥{model.publicInputPrice}/{model.unit}</span>
+              </div>
+            )}
+            {!pricingItem && model.publicOutputPrice > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">输出价格:</span>
+                <span>¥{model.publicOutputPrice}/{model.unit}</span>
+              </div>
+            )}
+            {!pricingItem && model.publicUnifiedPrice > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">统一价格:</span>
+                <span>¥{model.publicUnifiedPrice}/{model.unit}</span>
+              </div>
+            )}
+          </>
         )}
       </CardContent>
     </Card>

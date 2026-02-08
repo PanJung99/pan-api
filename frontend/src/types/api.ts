@@ -104,6 +104,7 @@ export interface DisplayModelVO {
   modelTypeName: string;
   priceMultiplier: number;
   isActive: number;
+  pricingItems: PricingItemResp[];
 }
 
 export interface ModelType {
