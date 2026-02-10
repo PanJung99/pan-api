@@ -19,15 +19,17 @@ public class UserService {
 
     private final AdminMapper adminMapper;
 
-    public User findById(Long id) {
-        User user = userMapper.findById(id);
-        return user;
+    public User getById(Long id) {
+        return userMapper.findById(id);
     }
 
     public Admin getAdminByUserId(Long userId) {
         return adminMapper.selectByUserId(userId);
     }
 
+    /**
+     * Retrieves user list with pagination
+     */
     public IPage<AdminUserResp> getUserPage(int pageNum, int pageSize) {
         int MAX_PAGE_SIZE = 100; // 最大页大小
         if (pageSize > MAX_PAGE_SIZE) {

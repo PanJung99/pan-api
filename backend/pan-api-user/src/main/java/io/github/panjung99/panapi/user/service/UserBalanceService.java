@@ -25,9 +25,9 @@ public class UserBalanceService {
     private final BillService billService;
 
     /**
-     * 通过userId获取用户余额
-     * @param userId
-     * @return 用户当前余额
+     * Retrieves the balance of a specific user.
+     * @param userId user id
+     * @return user's current balance
      */
     public BigDecimal getBalanceByUserId(Long userId) {
         Balance balance = balanceMapper.findByUserId(userId);
@@ -38,9 +38,10 @@ public class UserBalanceService {
     }
 
     /**
-     * 扣除余额， 注意要同时在Bill表创建扣费记录
-     * @param userId
-     * @param amount
+     * Deducts the balance of a specific user.
+     * Note: Remember to create a bill record.
+     * @param userId user id
+     * @param amount amount to deduct
      */
     @Transactional(rollbackFor = Exception.class)
     public void deductBalance(Long userId, BigDecimal amount) {
@@ -52,9 +53,10 @@ public class UserBalanceService {
     }
 
     /**
-     * 增加余额， 注意要同时在Bill表创建扣费记录
-     * @param userId
-     * @param amount
+     * Increases the balance of a specific user.
+     * Note: Remember to create a bill record.
+     * @param userId user id
+     * @param amount amount to increase
      */
     @Transactional(rollbackFor = Exception.class)
     public void increaseBalance(Long userId, BigDecimal amount) {
@@ -65,10 +67,11 @@ public class UserBalanceService {
     }
 
     /**
-     * 手动调整用户余额（增加或减少），并创建账单记录
-     * @param userId 用户ID
-     * @param amount 调整金额（正数表示增加，负数表示减少）
-     * @param reason 调整原因
+     * Manually adjusts the balance of a specific user(increase or deduct).
+     * And create a bill record.
+     * @param userId user id
+     * @param amount amount to increase/deduct (positive to increase)
+     * @param reason reason why adjust
      */
     @Transactional(rollbackFor = Exception.class)
     public void adjustBalance(Long userId, BigDecimal amount, String reason) {

@@ -28,7 +28,6 @@ public class ApiKeyService {
         return apiKeys.stream()
                 .map(ApiKeyService::toDto)
                 .toList();
-
     }
 
     @Transactional

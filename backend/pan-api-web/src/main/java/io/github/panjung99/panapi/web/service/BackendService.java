@@ -62,7 +62,7 @@ public class BackendService {
      * @return the user's profile, or null if user is not found.
      */
     public UserProfileResp getProfileByUserId(Long userId) {
-        User user = userService.findById(userId);
+        User user = userService.getById(userId);
         if (user == null) {
             log.info("User not found, userId={}", userId);
             return null;

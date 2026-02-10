@@ -49,7 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // 通过jwt验证
             String userId = jwtUtil.extractUserId(jwt);
             Long id = Long.parseLong(userId);
-            User user = userService.findById(id);
+            User user = userService.getById(id);
             if (user == null) {
                 throw new AppException(ErrorEnum.NO_SUCH_USER);
             }
