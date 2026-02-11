@@ -81,7 +81,7 @@ public class UserBalanceService {
         }
 
         BigDecimal deductAmount = amount.abs();
-        if (amount.compareTo(BigDecimal.ZERO) > 0) {
+        if (amount.compareTo(BigDecimal.ZERO) >= 0) {
             increaseBalance(userId, deductAmount);
         } else {
             deductBalance(userId, deductAmount);
