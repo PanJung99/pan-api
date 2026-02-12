@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum VenTypeEnum {
-    COMMON("通用类型", null),
+    COMMON("类OpenAI", null),
     OPEN_AI("OpenAI", null),
     DEEP_SEEK("深度求索", "https://api.deepseek.com/v1"),
     GLM("智谱清言", null),

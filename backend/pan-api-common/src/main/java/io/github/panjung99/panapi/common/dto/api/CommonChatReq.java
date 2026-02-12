@@ -531,6 +531,7 @@ public class CommonChatReq {
             @JsonInclude(JsonInclude.Include.NON_NULL)
             public static class ImageUrl {
                 private String url;
+                private String detail;
             }
 
             public ContentPart() {
