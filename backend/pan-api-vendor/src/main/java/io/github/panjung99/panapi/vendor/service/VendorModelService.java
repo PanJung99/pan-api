@@ -63,7 +63,7 @@ public class VendorModelService {
             if (oldModels.containsKey(newItem.getName())) {
                 // If model exists, update and clear the logical delete mark.
                 newItem.setIsDeleted(0);
-                vendorModelMapper.update(newItem);
+                vendorModelMapper.updateByName(newItem);
             } else {
                 // Create new Vendor Model if not exists.
                 vendorModelMapper.insert(newItem);

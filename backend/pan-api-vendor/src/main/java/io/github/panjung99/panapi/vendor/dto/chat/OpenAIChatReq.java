@@ -3,6 +3,7 @@ package io.github.panjung99.panapi.vendor.dto.chat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.util.List;
@@ -296,7 +297,8 @@ public class OpenAIChatReq {
         /**
          * 必需参数：消息内容
          */
-        private String content;
+        @JsonDeserialize(using = OpenAIMessageContentDeserializer.class)
+        private List<ContentPart> content;
 
         /**
          * 可选参数：消息发送者名称

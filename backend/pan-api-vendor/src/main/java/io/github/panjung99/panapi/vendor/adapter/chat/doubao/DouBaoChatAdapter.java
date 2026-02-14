@@ -4,11 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.panjung99.panapi.common.dto.api.CommonChatReq;
 import io.github.panjung99.panapi.common.dto.api.CommonChatResp;
 import io.github.panjung99.panapi.common.dto.api.CommonChunk;
+import io.github.panjung99.panapi.common.enums.ModelCategory;
 import io.github.panjung99.panapi.common.enums.VenTypeEnum;
 import io.github.panjung99.panapi.common.exceptions.AppException;
 import io.github.panjung99.panapi.common.exceptions.ErrorEnum;
 import io.github.panjung99.panapi.vendor.adapter.chat.VendorChatAdapter;
-import io.github.panjung99.panapi.vendor.dto.OpenAIModelListResp;
+import io.github.panjung99.panapi.vendor.dto.DouBaoModelListResp;
 import io.github.panjung99.panapi.vendor.dto.chat.DouBaoChatReq;
 import io.github.panjung99.panapi.vendor.entity.VendorModel;
 import io.github.panjung99.panapi.vendor.service.VendorModelService;
@@ -101,11 +102,11 @@ public class DouBaoChatAdapter implements VendorChatAdapter {
         if (webClient == null) {
             throw new AppException(ErrorEnum.VENDOR_CLIENT_NOT_FOUND);
         }
-        OpenAIModelListResp modelListResp = webClient
+        DouBaoModelListResp modelListResp = webClient
                 .get()
                 .uri("/models")
                 .retrieve()
-                .bodyToMono(OpenAIModelListResp.class)
+                .bodyToMono(DouBaoModelListResp.class)
                 .block();
         if (modelListResp == null || modelListResp.getData().isEmpty()) {
             log.warn("Sync vendor model list failed, resp is empty. vendorId:{}", vendorId);
@@ -116,10 +117,60 @@ public class DouBaoChatAdapter implements VendorChatAdapter {
                     VendorModel model = new VendorModel();
                     model.setVendorId(vendorId);
                     model.setName(t.getId());
+                    model.setCategory(determineModelCategory(t));
                     return model;
                 })
                 .toList();
 
         vendorModelService.updateVendorModels(vendorId, vendorModels);
+    }
+
+    private ModelCategory determineModelCategory(DouBaoModelListResp.ModelData modelData) {
+        if (modelData == null) {
+            return ModelCategory.chat;
+        }
+
+        String domain = modelData.getDomain();
+        List<String> taskType = modelData.getTaskType();
+
+        if (domain != null && !domain.isEmpty()) {
+            ModelCategory category = switch (domain) {
+                case "Embedding" -> ModelCategory.embedding;
+                case "ImageGeneration" -> ModelCategory.image;
+                case "VideoGeneration" -> ModelCategory.video;
+                case "AudioGeneration" -> ModelCategory.audio;
+                case "3DGeneration" -> ModelCategory.three_d;
+                case "LLM", "VLM", "Router" -> ModelCategory.chat;
+                default -> null;
+            };
+            if (category != null) {
+                return category;
+            }
+        }
+
+        if (taskType != null && !taskType.isEmpty()) {
+            for (String task : taskType) {
+                if ("TextEmbedding".equalsIgnoreCase(task)) {
+                    return ModelCategory.embedding;
+                }
+                if ("ImageGeneration".equalsIgnoreCase(task) || "TextToImage".equalsIgnoreCase(task)) {
+                    return ModelCategory.image;
+                }
+                if ("VideoGeneration".equalsIgnoreCase(task) || "TextToVideo".equalsIgnoreCase(task) || "ImageToVideo".equalsIgnoreCase(task)) {
+                    return ModelCategory.video;
+                }
+                if ("AudioGeneration".equalsIgnoreCase(task) || "TextToAudio".equalsIgnoreCase(task)) {
+                    return ModelCategory.audio;
+                }
+                if ("3DGeneration".equalsIgnoreCase(task) || "ImageTo3D".equalsIgnoreCase(task)) {
+                    return ModelCategory.three_d;
+                }
+                if ("TextGeneration".equalsIgnoreCase(task) || "VisualQuestionAnswering".equalsIgnoreCase(task)) {
+                    return ModelCategory.chat;
+                }
+            }
+        }
+
+        return ModelCategory.chat;
     }
 }

@@ -32,6 +32,7 @@ CREATE TABLE `ven_model` (
   `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '模型ID(UUID)',
   `vendor_id` BIGINT NOT NULL COMMENT '服务商ID',
   `name` VARCHAR(100) NOT NULL COMMENT '模型名称(服务商内部名称)',
+  `category` varchar(32) NOT NULL COMMENT '模型类别：chat-对话模型,image-绘画模型,audio-语音模型,video-视频模型,embedding-多模态向量模型',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除：0-正常 1-已删除',
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

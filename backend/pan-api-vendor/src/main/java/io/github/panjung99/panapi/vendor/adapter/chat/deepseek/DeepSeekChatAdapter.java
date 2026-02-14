@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.panjung99.panapi.common.dto.api.CommonChatReq;
 import io.github.panjung99.panapi.common.dto.api.CommonChatResp;
 import io.github.panjung99.panapi.common.dto.api.CommonChunk;
+import io.github.panjung99.panapi.common.enums.ModelCategory;
 import io.github.panjung99.panapi.common.exceptions.AppException;
 import io.github.panjung99.panapi.common.exceptions.ErrorEnum;
 import io.github.panjung99.panapi.vendor.adapter.chat.VendorChatAdapter;
@@ -132,6 +133,7 @@ public class DeepSeekChatAdapter implements VendorChatAdapter {
                             VendorModel model = new VendorModel();
                             model.setVendorId(vendorId);
                             model.setName(t.getId());
+                            model.setCategory(ModelCategory.chat);
                             return model;
                         })
                         .toList();

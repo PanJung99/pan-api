@@ -51,4 +51,11 @@ public interface VendorModelMapper {
      * @return 影响行数
      */
     int logicalDelete(@Param("id") Long id, @Param("date") LocalDateTime date);
+
+    /**
+     * 根据服务商ID和模型名称更新模型信息
+     * @param model 模型实体
+     * @return 影响行数
+     */
+    int updateByName(VendorModel model);
 }

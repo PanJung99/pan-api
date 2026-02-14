@@ -7,13 +7,14 @@
         <id column="id" property="id" />
         <result column="vendor_id" property="vendorId" />
         <result column="name" property="name" />
+        <result column="category" property="category" />
         <result column="is_deleted" property="isDeleted" />
         <result column="created_at" property="createdAt" />
         <result column="updated_at" property="updatedAt" />
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, vendor_id, name, is_deleted,
+        id, vendor_id, name, category, is_deleted,
         created_at, updated_at
     </sql>
 
@@ -40,6 +41,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="vendorId != null">vendor_id,</if>
             <if test="name != null and name != ''">name,</if>
+            <if test="category != null">category,</if>
             <if test="isDeleted != null">is_deleted,</if>
             <if test="createdAt != null">created_at,</if>
             <if test="updatedAt != null">updated_at,</if>
@@ -47,6 +49,7 @@
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="vendorId != null">#{vendorId},</if>
             <if test="name != null and name != ''">#{name},</if>
+            <if test="category != null">#{category},</if>
             <if test="isDeleted != null">#{isDeleted},</if>
             <if test="createdAt != null">#{createdAt},</if>
             <if test="updatedAt != null">#{updatedAt},</if>
@@ -58,6 +61,7 @@
         <set>
             <if test="vendorId != null">vendor_id = #{vendorId},</if>
             <if test="name != null and name != ''">name = #{name},</if>
+            <if test="category != null">category = #{category},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="updatedAt != null">updated_at = #{updatedAt},</if>
@@ -73,5 +77,17 @@
             is_deleted = 1,
             updated_at = #{date}
         WHERE id = #{id}
+    </update>
+
+    <update id="updateByName">
+        UPDATE ven_model
+        <set>
+            <if test="category != null">category = #{category},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="updatedAt == null">updated_at = NOW(),</if>
+        </set>
+        WHERE vendor_id = #{vendorId} AND name = #{name}
     </update>
 </mapper>
