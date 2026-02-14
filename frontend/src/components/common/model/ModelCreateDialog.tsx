@@ -156,10 +156,10 @@ export function ModelCreateDialog({ open, onOpenChange, onCreated }: Props) {
     }))
   }
 
-  // 按服务商分组服务商模型
+  // 按服务商分组服务商模型，根据当前选择的 category 进行筛选
   const vendorModelsByVendor = vendors.map((vendor) => ({
     vendor,
-    models: vendorModels.filter((vm) => vm.vendorId === vendor.id),
+    models: vendorModels.filter((vm) => vm.vendorId === vendor.id && vm.category === formData.category),
   }))
 
   if (!open) return null
@@ -215,6 +215,7 @@ export function ModelCreateDialog({ open, onOpenChange, onCreated }: Props) {
                     <option value="audio">语音</option>
                     <option value="video">视频</option>
                     <option value="embedding">向量</option>
+                    <option value="three_d">3D</option>
                   </select>
                 </div>
                 <div className="space-y-2">

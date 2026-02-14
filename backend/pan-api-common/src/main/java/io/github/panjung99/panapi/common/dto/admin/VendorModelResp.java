@@ -1,5 +1,6 @@
 package io.github.panjung99.panapi.common.dto.admin;
 
+import io.github.panjung99.panapi.common.enums.ModelCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -15,4 +16,7 @@ public class VendorModelResp {
 
     @Schema(description = "服务商内部模型名称 (如: gpt-4, deepseek-chat)", example = "gpt-4-0125-preview")
     private String name;
+
+    @Schema(description = "模型类别：chat-对话模型,image-绘画模型,audio-语音模型,video-视频模型,embedding-多模态向量模型,three_d-3D模型", example = "chat")
+    private ModelCategory category;
 }

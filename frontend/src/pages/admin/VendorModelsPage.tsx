@@ -90,6 +90,9 @@ export function VendorModelsPage() {
                       <div className="text-sm text-muted-foreground mt-1">
                         ID: {model.id}
                       </div>
+                      <div className="text-sm text-muted-foreground mt-1">
+                        类型: {model.category}
+                      </div>
                     </div>
                   ))}
                 </div>

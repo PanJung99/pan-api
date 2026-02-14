@@ -241,7 +241,8 @@ public class AdminVendorController {
                                                         "vendorId": 1,
                                                         "vendorName": "OpenAI",
                                                         "modelId": 1,
-                                                        "modelName": "gpt-3.5-turbo"
+                                                        "modelName": "gpt-3.5-turbo",
+                                                        "category": "chat"
                                                     }
                                                 ]
                                             }

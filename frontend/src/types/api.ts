@@ -222,6 +222,7 @@ export interface VendorModelResp {
   id: number;
   vendorId: number;
   name: string;
+  category: string;
 }
 
 // 模型管理相关（管理员端）

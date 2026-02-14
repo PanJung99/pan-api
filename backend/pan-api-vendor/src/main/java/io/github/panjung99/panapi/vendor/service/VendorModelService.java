@@ -39,6 +39,7 @@ public class VendorModelService {
                 resp.setId(t.getId());
                 resp.setName(t.getName());
                 resp.setVendorId(t.getVendorId());
+                resp.setCategory(t.getCategory());
                 return resp;
             }).toList();
         }
