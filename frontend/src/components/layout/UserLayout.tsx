@@ -1,7 +1,5 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { useAuthStore } from "@/store/auth"
-import { useAdminCheck } from "@/hooks/useAdminCheck"
+import { Link, useLocation } from "react-router-dom"
+import { Header } from "@/components/layout/Header"
 import { cn } from "@/utils/cn"
 
 interface UserLayoutProps {
@@ -18,34 +16,10 @@ const navItems = [
 
 export function UserLayout({ children }: UserLayoutProps) {
   const location = useLocation()
-  const navigate = useNavigate()
-  const { logout } = useAuthStore()
-  const { isAdmin } = useAdminCheck()
-
-  const handleLogout = () => {
-    logout()
-    navigate("/login")
-  }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold">
-            Pan API
-          </Link>
-          <div className="flex items-center gap-4">
-            {isAdmin && (
-              <Link to="/admin/dashboard">
-                <Button variant="ghost">管理后台</Button>
-              </Link>
-            )}
-            <Button variant="outline" onClick={handleLogout}>
-              退出登录
-            </Button>
-          </div>
-        </div>
-      </header>
+      <Header />
       <div className="flex flex-1">
         <aside className="w-64 border-r">
           <nav className="p-4 space-y-2">

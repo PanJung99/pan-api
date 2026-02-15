@@ -16,6 +16,7 @@ import { AdminVendorsPage } from "@/pages/admin/VendorsPage"
 import { VendorTokensPage } from "@/pages/admin/VendorTokensPage"
 import { VendorModelsPage } from "@/pages/admin/VendorModelsPage"
 import { AdminUsersPage } from "@/pages/admin/UsersPage"
+import { ApiDocsPage } from "@/pages/admin/ApiDocsPage"
 
 // 路由守卫组件
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -156,5 +157,13 @@ export const router = createBrowserRouter([
         <AdminUsersPage />
       </ProtectedRoute>
     ),
+  },
+  {
+    path: "/admin/api-docs",
+    element: <ApiDocsPage />,
+  },
+  {
+    path: "/admin/api-docs/:docId",
+    element: <ApiDocsPage />,
   },
 ])

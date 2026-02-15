@@ -1,6 +1,5 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
-import { useAuthStore } from "@/store/auth"
+import { Link, useLocation } from "react-router-dom"
+import { Header } from "@/components/layout/Header"
 import { cn } from "@/utils/cn"
 
 interface AdminLayoutProps {
@@ -18,26 +17,10 @@ const navItems = [
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   const location = useLocation()
-  const navigate = useNavigate()
-  const { logout } = useAuthStore()
-
-  const handleLogout = () => {
-    logout()
-    navigate("/login")
-  }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="text-xl font-bold">
-            Pan API - 管理后台
-          </Link>
-          <Button variant="outline" onClick={handleLogout}>
-            退出登录
-          </Button>
-        </div>
-      </header>
+      <Header />
       <div className="flex flex-1">
         <aside className="w-64 border-r">
           <nav className="p-4 space-y-2">
